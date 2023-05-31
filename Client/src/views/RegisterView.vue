@@ -3,9 +3,9 @@
 </script>
 <template>
     <section>
-        <div class="flex items-center justify-center px-6 py-8 opacity-70">
-            <div class="shadow w-[25%] rounded-lg">
-                <div class="p-6 bg-white rounded-lg">
+        <div class="flex items-center justify-center px-6 py-8">
+            <div class="shadow w-[25%] rounded-lg overflow-hidden">
+                <div class="p-6 bg-white bg-opacity-50">
                     <h1 class="text-xl font-bold text-center text-indigo-900">
                         ĐĂNG KÝ
                     </h1>
