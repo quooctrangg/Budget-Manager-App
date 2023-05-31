@@ -2,14 +2,14 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    list-style: none;
+    height: 100vh;
+    width: 100%;
 }
 
 body {
     font-family: 'Nunito', sans-serif;
     font-size: clamp(1rem, 1.5vw, 1.2rem);
-    overflow: hidden;
+    background-image: url(/bg.png);
     height: 100vh;
     width: 100%;
-    background-image: url(/bg.png);
 }
