@@ -27,9 +27,15 @@ const selectNavbarItem = (item) => {
                 </router-link>
             </nav>
         </div>
-        <button class="h-auto text-red-600">
-            <i class="fa-solid fa-right-from-bracket h-auto w-auto"></i>
-            Đăng xuất
-        </button>
+        <div class="flex gap-10 p-2 justify-center items-center">
+            <button @click="navbarStore.changeIsShow">
+                <i class="fa-solid fa-gear"></i>
+            </button>
+            <button class="h-auto text-red-600">
+                <i class="fa-solid fa-right-from-bracket h-auto w-auto"></i>
+                Đăng xuất
+            </button>
+        </div>
+
     </div>
 </template>
