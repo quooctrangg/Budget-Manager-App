@@ -78,7 +78,7 @@ const selectArrange = ref('')
                     </div>
                 </form>
             </div>
-            <div class="w-[60%] h-[70%] overflow-auto">
+            <div class="w-[60%] h-[80%] overflow-auto">
                 <Card v-for="t in 10" :key="t" />
             </div>
         </div>

@@ -12,7 +12,7 @@ import Card from '../components/Card.vue'
             <div class="w-[30%] h-full">
                 <FormAdd />
             </div>
-            <div class="w-[70%] h-[70%] overflow-auto">
+            <div class="w-[70%] h-[80%] overflow-auto">
                 <Card v-for="t in 4" :key="t" />
             </div>
         </div>
