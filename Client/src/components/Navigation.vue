@@ -1,10 +1,29 @@
 <script setup>
+import { useToast } from 'vue-toast-notification'
+import { useRouter } from 'vue-router'
 import { useNavbarStore } from '../stores/navbar.store'
+import { useAuthStore } from '../stores/auth.store'
+import { useUserStore } from '../stores/user.store'
 
+const router = useRouter()
+const $toast = useToast();
 const navbarStore = useNavbarStore()
+const userStore = useUserStore()
+const authStore = useAuthStore()
 
 const selectNavbarItem = (item) => {
     navbarStore.activeIndex = item;
+}
+
+const submitLogout = async () => {
+    await authStore.logout()
+    if (authStore.err) {
+        $toast.error(authStore.err, { position: 'top-right' })
+        return
+    }
+    userStore.clearSession()
+    $toast.success(authStore.result.message, { position: 'top-right' })
+    router.push({ name: 'login' })
 }
 </script>
 <template>
@@ -31,7 +50,7 @@ const selectNavbarItem = (item) => {
             <button @click="navbarStore.changeIsShow">
                 <i class="fa-solid fa-gear"></i>
             </button>
-            <button class="h-auto text-red-600">
+            <button class="h-auto text-red-600" @click="submitLogout">
                 <i class="fa-solid fa-right-from-bracket h-auto w-auto"></i>
                 Đăng xuất
             </button>

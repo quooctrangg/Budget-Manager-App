@@ -20,5 +20,30 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    return { err, result, user, register }
+    const login = async data => {
+        err.value = null
+        result.value = null
+        try {
+            let res = await authService.login(data)
+            if (res.code !== 200) throw new Error(res.message)
+            user.value = res.data
+            result.value = res
+        } catch (error) {
+            err.value = error.message
+        }
+    }
+
+    const logout = async () => {
+        err.value = null
+        result.value = null
+        try {
+            let res = await authService.logout()
+            if (res.code !== 200) throw new Error(res.message)
+            result.value = res
+        } catch (error) {
+            err.value = error.message
+        }
+    }
+
+    return { err, result, user, register, login, logout }
 })
