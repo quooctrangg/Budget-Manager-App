@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import { Bar, Doughnut } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js'
 
@@ -35,10 +36,12 @@ const dataDoughnut = {
         ],
     }]
 }
+
+const selectTime = ref('all')
 </script>
 <template>
     <div class="h-full flex flex-col justify-around">
-        <div class="flex gap-5 justify-between mb-4">
+        <div class="flex gap-5 justify-between">
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
                 <div class="text-green-500 bg-white h-full w-[30%] flex justify-center items-center text-3xl">
                     <i class="fa-regular fa-money-bill-1"></i>
@@ -67,17 +70,51 @@ const dataDoughnut = {
                 </div>
             </div>
         </div>
-        <div class="flex gap-2">
-            <div class="w-[70%] border-[3px] border-white rounded-xl bg-slate-100 p-2">
-                <h1 class="text-2xl font-bold text-indigo-900 mb-2">Thu nhập và chi tiêu</h1>
-                <div>
-                    <Bar :data="dataBar" class="w-full" />
+        <div>
+            <form class="flex items-center w-full gap-5 mb-2">
+                <div class="flex items-center gap-1">
+                    <label class="text-base">Thời gian:</label>
+                    <select v-model="selectTime"
+                        class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 p-2 focus:border-green-500 outline-0 text-base">
+                        <option value="all">Tất cả</option>
+                        <option value="1day">1 ngày qua</option>
+                        <option value="7days">7 ngày qua</option>
+                        <option value="30days">30 ngày qua</option>
+                        <option value="other">Tùy chỉnh...</option>
+                    </select>
                 </div>
-            </div>
-            <div class="w-[30%] border-[3px] border-white rounded-xl bg-slate-100 p-2">
-                <h1 class="text-2xl font-bold text-indigo-900 mb-2">Chi phí theo danh mục</h1>
+                <div class="flex items-center gap-1" v-if="selectTime === 'other'">
+                    <div class="flex items-center gap-1">
+                        <label class="text-sm">Từ:</label>
+                        <input type="date"
+                            class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-400">
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <label class="text-sm">đến:</label>
+                        <input type="date"
+                            class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-400">
+                    </div>
+                </div>
                 <div>
-                    <Doughnut :data="dataDoughnut" class="w-full" />
+                    <button type="submit"
+                        class="w-auto border py-1 px-2 rounded-lg bg-green-400 hover:bg-green-200 flex items-center gap-2 text-gray-700">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Chọn
+                    </button>
+                </div>
+            </form>
+            <div class="flex gap-2">
+                <div class="w-[70%] border-[3px] border-white rounded-xl bg-slate-100 p-2">
+                    <h1 class="text-2xl font-bold text-indigo-900 mb-2">Thu nhập và chi tiêu</h1>
+                    <div>
+                        <Bar :data="dataBar" class="w-full" />
+                    </div>
+                </div>
+                <div class="w-[30%] border-[3px] border-white rounded-xl bg-slate-100 p-2">
+                    <h1 class="text-2xl font-bold text-indigo-900 mb-2">Chi phí theo danh mục</h1>
+                    <div>
+                        <Doughnut :data="dataDoughnut" class="w-full" />
+                    </div>
                 </div>
             </div>
         </div>
