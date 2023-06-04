@@ -26,11 +26,18 @@
                 <i class="fa-solid fa-plus"></i>
                 Thêm
             </button>
-            <button type="submit"
-                class="w-auto border py-1 px-2 rounded-lg bg-orange-600 hover:bg-orange-400 flex items-center gap-2 text-gray-700">
-                <i class="fa-regular fa-pen-to-square"></i>
-                Cập nhật
-            </button>
+            <div class="flex gap-2">
+                <button type="button"
+                    class="w-auto border py-1 px-2 rounded-lg bg-red-600 hover:bg-red-400 flex items-center gap-2 text-gray-700">
+                    <i class="fa-solid fa-xmark"></i>
+                    Hủy
+                </button>
+                <button type="submit"
+                    class="w-auto border py-1 px-2 rounded-lg bg-orange-600 hover:bg-orange-400 flex items-center gap-2 text-gray-700">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                    Cập nhật
+                </button>
+            </div>
         </div>
     </form>
 </template>

@@ -57,7 +57,7 @@ const selectTime = ref('all')
                 </div>
                 <div class="p-2">
                     <h3 class="font-semibold text-base text-gray-600 ">Tổng chi tiêu</h3>
-                    <span class="text-gray-500">-5.000.000đ</span>
+                    <span class="text-gray-500">5.000.000đ</span>
                 </div>
             </div>
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
