@@ -1,12 +1,24 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const useAuthStore = defineStore('auth', () => {
+import authService from '../services/auth.service'
 
-    return {}
-}, {
-    persist: {
-        key: 'auth-store',
-        storage: sessionStorage
+export const useAuthStore = defineStore('auth', () => {
+    const err = ref(null)
+    const result = ref(null)
+    const user = ref(null)
+
+    const register = async data => {
+        err.value = null
+        result.value = null
+        try {
+            let res = await authService.register(data)
+            if (res.code !== 200) throw new Error(res.message)
+            result.value = res
+        } catch (error) {
+            err.value = error.message
+        }
     }
+
+    return { err, result, user, register }
 })
