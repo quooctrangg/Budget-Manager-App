@@ -25,8 +25,9 @@
                 </div>
             </div>
         </div>
-        <div class="p-5 cursor-pointer text-red-600 hover:text-red-400">
-            <i class="fa-solid fa-trash"></i>
+        <div class="p-5">
+            <i class="fa-solid fa-pen-to-square cursor-pointer text-orange-600 hover:text-orange-400"></i>
+            <i class="fa-solid fa-trash cursor-pointer text-red-600 hover:text-red-400"></i>
         </div>
     </div>
 </template>
