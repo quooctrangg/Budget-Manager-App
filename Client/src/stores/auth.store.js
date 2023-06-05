@@ -26,7 +26,6 @@ export const useAuthStore = defineStore('auth', () => {
         try {
             let res = await authService.login(data)
             if (res.code !== 200) throw new Error(res.message)
-            user.value = res.data
             result.value = res
         } catch (error) {
             err.value = error.message
