@@ -8,7 +8,12 @@ export const useUserStore = defineStore('user', () => {
         sessionStorage.removeItem('user');
     }
 
-    return { user, clearSession }
+    const nameFilter = () => {
+        let name = user.value.email || ''
+        return name.slice(0, name.indexOf('@'))
+    }
+
+    return { user, clearSession, nameFilter }
 }, {
     persist: {
         key: 'user',

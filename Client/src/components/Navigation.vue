@@ -34,7 +34,7 @@ const submitLogout = async () => {
                 <div class="w-[50%] m-auto h-auto">
                     <img src="logo.png" alt="logo">
                 </div>
-                <p class="text-center h-auto">Xin chào, quoctrang</p>
+                <p class="text-center h-auto">Xin chào, {{ userStore.nameFilter() }}</p>
             </div>
             <nav class="h-auto flex flex-col gap-5 mt-5 px-5">
                 <router-link v-for="item in navbarStore.navbarItems" :key="item.id" :to="{ name: '' }" class="h-auto w-full"
