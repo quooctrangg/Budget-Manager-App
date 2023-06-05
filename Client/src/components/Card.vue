@@ -1,3 +1,8 @@
+<script setup>
+import { useTransactionStore } from '../stores/transaction.store'
+
+const transactionStore = useTransactionStore()
+</script>
 <template>
     <div
         class="rounded-md border-[2px] border-white bg-slate-100 bg-opacity-50 w-full p-1 focus:border-green-500 flex justify-between items-center mb-2">
@@ -7,7 +12,7 @@
             </div>
             <div class="flex flex-col justify-between">
                 <div class="">
-                    <h3>Test</h3>
+                    <h3>Ăn uống</h3>
                 </div>
                 <div class="flex gap-5 text-base">
                     <h4 class="flex gap-1 items-center">
@@ -26,7 +31,8 @@
             </div>
         </div>
         <div class="p-5">
-            <i class="fa-solid fa-pen-to-square cursor-pointer text-orange-600 hover:text-orange-400"></i>
+            <i class="fa-solid fa-pen-to-square cursor-pointer text-orange-600 hover:text-orange-400"
+                @click="transactionStore.isShowEdit = true"></i>
             <i class="fa-solid fa-trash cursor-pointer text-red-600 hover:text-red-400"></i>
         </div>
     </div>
