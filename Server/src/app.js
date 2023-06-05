@@ -7,6 +7,7 @@ const ApiError = require('./utils/api-error')
 
 const userRouter = require('./routes/user.router')
 const authRouter = require('./routes/auth.router')
+const transactionRouter = require('./routes/transaction.router')
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/user/', userRouter)
 app.use('/api/auth/', authRouter)
+app.use('/api/transaction/', transactionRouter)
 
 app.use((req, res, next) => {
     return next(new ApiError(404, 'Không tìm thấy tài nguyên'))

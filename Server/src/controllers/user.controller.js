@@ -1,6 +1,5 @@
 const userService = require('../services/user.service')
 const ApiError = require('../utils/api-error')
-const ApiRes = require('../utils/api-res')
 
 const changePassword = async (req, res, next) => {
     if (!req.body || !req.params) return next(new ApiError(400, 'Thiếu tham số bắt buộc!'))
