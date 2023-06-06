@@ -17,7 +17,9 @@ const TransactionSchema = new schema({
     },
     date: {
         type: Date,
-        require: true
+        required: true,
+        trim: true,
+        default: Date.now
     },
     category: {
         type: String,

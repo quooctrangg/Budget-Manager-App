@@ -1,34 +1,39 @@
 const transactionDB = require('../models/transaction.model')
 const ApiRes = require('../utils/api-res')
+const monent = require('moment')
 
-const findAllTransactions = async () => {
-
+const findAllTransactionsByUserId = async userId => {
+    return new ApiRes(200, 'success', 'Tìm thành công!', await transactionDB.find({ userId: userId }))
 }
 
-const createTransaction = async () => {
-
+const createTransaction = async data => {
+    if (data.date) data.date = monent.utc(data.date, 'MM-DD-YYYY').utcOffset('+07:00')
+    return new ApiRes(200, 'success', 'Tạo giao dịch thành công!', await transactionDB.create(data))
 }
 
-const deleteAllTransactions = async () => {
-
+const findByIdTransaction = async id => {
+    let data = await transactionDB.findById(id)
+    if (!data) return new ApiRes(400, 'failed', 'Không có giao dịch!', null)
+    return new ApiRes(200, 'success', 'Tìm thấy giao dịch!', data)
 }
 
-const findByIdTransaction = async () => {
-
+const deleteTransaction = async id => {
+    let data = await transactionDB.findByIdAndDelete(id)
+    if (!data) return new ApiRes(400, 'failed', 'Không có giao dịch!', null)
+    return new ApiRes(200, 'success', 'Xoá giao dịch thành công!', data)
 }
 
-const deleteTransaction = async () => {
-
-}
-
-const updateTransaction = async () => {
-
+const updateTransaction = async (id, newdata) => {
+    let { amount, date, category, note } = newdata
+    date = monent.utc(date, 'MM-DD-YYYY').utcOffset('+07:00')
+    let data = await transactionDB.findByIdAndUpdate(id, { amount, date, category, note }, { new: true })
+    if (!data) return new ApiRes(400, 'failed', 'Không có giao dịch!', null)
+    return new ApiRes(200, 'success', 'Cập nhật giao dịch thành công!', data)
 }
 
 module.exports = {
-    findAllTransactions,
+    findAllTransactionsByUserId,
     createTransaction,
-    deleteAllTransactions,
     findByIdTransaction,
     deleteTransaction,
     updateTransaction

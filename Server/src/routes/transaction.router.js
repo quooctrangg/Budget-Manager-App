@@ -3,9 +3,10 @@ const transaction = require('../controllers/transaction.controller')
 const router = express.Router();
 
 router.route('/')
-    .get(transaction.findAllTransactions)
     .post(transaction.createTransaction)
-    .delete(transaction.deleteAllTransactions)
+
+router.route('/user/:userId')
+    .get(transaction.findAllTransactionsByUserId)
 
 router.route('/:id')
     .get(transaction.findByIdTransaction)
