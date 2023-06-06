@@ -1,13 +1,40 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import moment from 'moment'
 
 import transactionService from '../services/transaction.service'
 
 export const useTransactionStore = defineStore('transaction', () => {
     const err = ref(null)
     const result = ref(null)
-    const transaction = ref(null)
     const isShowEdit = ref(false)
+    const data = ref({
+        userId: '',
+        amount: '',
+        date: '',
+        type: '',
+        category: '',
+        note: ''
+    })
+    const idTransacton = ref(null)
+
+    const resetData = () => {
+        data.value.userId = ''
+        data.value.amount = ''
+        data.value.date = ''
+        data.value.type = ''
+        data.value.category = ''
+        data.value.note = ''
+    }
+
+    const setData = newdata => {
+        data.value.userId = newdata.userId
+        data.value.amount = newdata.amount
+        data.value.date = moment(newdata.date).format('YYYY-MM-DD')
+        data.value.type = newdata.type
+        data.value.category = newdata.category
+        data.value.note = newdata.note
+    }
 
     const sortByDate = (value, type) => {
         return value.sort((a, b) => {
@@ -42,10 +69,9 @@ export const useTransactionStore = defineStore('transaction', () => {
         }
     }
 
-    const findAllTransactionById = async userId => {
+    const findAllTransactionByUserId = async userId => {
         err.value = null
         result.value = null
-        transaction.value = null
         try {
             let res = await transactionService.findTransactionByUserId(userId)
             if (res.code !== 200) throw new Error(res.message)
@@ -58,7 +84,6 @@ export const useTransactionStore = defineStore('transaction', () => {
     const deleteTransaction = async id => {
         err.value = null
         result.value = null
-        transaction.value = null
         try {
             let res = await transactionService.deleteTransaction(id)
             if (res.code !== 200) throw new Error(res.message)
@@ -68,8 +93,33 @@ export const useTransactionStore = defineStore('transaction', () => {
         }
     }
 
+    const findTransactionById = async id => {
+        err.value = null
+        result.value = null
+        try {
+            let res = await transactionService.findTransaction(id)
+            if (res.code !== 200) throw new Error(res.message)
+            result.value = res
+        } catch (error) {
+            err.value = error.message
+        }
+    }
+
+    const updateTransaction = async (id, data) => {
+        err.value = null
+        result.value = null
+        try {
+            let res = await transactionService.updateTransaction(id, data)
+            if (res.code !== 200) throw new Error(res.message)
+            result.value = res
+        } catch (error) {
+            err.value = error.message
+        }
+    }
+
     return {
-        err, result, transaction, isShowEdit, sortByDate, filerByType, sumAmount,
-        createTransaction, findAllTransactionById, deleteTransaction
+        err, result, isShowEdit, data, idTransacton, setData, resetData, sortByDate, filerByType, sumAmount,
+        createTransaction, findAllTransactionByUserId, deleteTransaction, findTransactionById,
+        updateTransaction
     }
 })

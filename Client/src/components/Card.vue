@@ -6,7 +6,7 @@ import moment from 'moment'
 const $toast = useToast()
 const transactionStore = useTransactionStore()
 const props = defineProps(['transaction'])
-const emits = defineEmits(['submitEvent'])
+const emits = defineEmits(['submitEvent', 'submitEdit'])
 
 const deleteTransaction = async id => {
     await transactionStore.deleteTransaction(id)
@@ -17,6 +17,11 @@ const deleteTransaction = async id => {
     $toast.success(transactionStore.result.message, { position: 'top-right' })
     emits('submitEvent')
 }
+
+const clickShowUpdateTransaction = id => {
+    transactionStore.isShowEdit = true
+    emits('submitEdit', id)
+}
 </script>
 <template>
     <div
@@ -26,7 +31,7 @@ const deleteTransaction = async id => {
                 <img :src="`/` + props.transaction.category + '.png'" alt="">
             </div>
             <div class="flex flex-col justify-between">
-                <div class="">
+                <div :class="props.transaction.type === 'incomes' ? 'text-green-500' : 'text-red-500'">
                     <h3>{{ props.transaction.category }}</h3>
                 </div>
                 <div class="flex gap-5 text-base">
@@ -55,7 +60,7 @@ const deleteTransaction = async id => {
         </div>
         <div class="p-5">
             <i class="fa-solid fa-pen-to-square cursor-pointer text-orange-600 hover:text-orange-400"
-                @click="transactionStore.isShowEdit = true"></i>
+                @click="clickShowUpdateTransaction(props.transaction._id)"></i>
             <i class="fa-solid fa-trash cursor-pointer text-red-600 hover:text-red-400"
                 @click="deleteTransaction(props.transaction._id)"></i>
         </div>

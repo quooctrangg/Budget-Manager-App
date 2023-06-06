@@ -14,7 +14,7 @@ const transaction = ref(null)
 const sumAmount = ref(0)
 
 const getTransaction = async () => {
-    await transactionStore.findAllTransactionById(userStore.user._id)
+    await transactionStore.findAllTransactionByUserId(userStore.user._id)
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
         return
@@ -23,6 +23,16 @@ const getTransaction = async () => {
     transaction.value = transactionStore.filerByType(transaction.value, 'expenses')
     transaction.value = transactionStore.sortByDate(transaction.value, 'asc')
     sumAmount.value = transactionStore.sumAmount(transaction.value)
+}
+
+const findTransactionById = async id => {
+    await transactionStore.findTransactionById(id)
+    if (transactionStore.err) {
+        $toast.error(transactionStore.err, { position: 'top-right' })
+        return
+    }
+    transactionStore.idTransacton = id
+    transactionStore.setData(transactionStore.result.data)
 }
 
 onMounted(() => {
@@ -46,7 +56,8 @@ onMounted(() => {
                 <FormAdd :type="'expenses'" @submitEvent="getTransaction" />
             </div>
             <div class="w-[70%] h-[80%] overflow-auto">
-                <Card v-for="item in transaction" :transaction="item" :key="item._id" @submitEvent="getTransaction" />
+                <Card v-for="item in transaction" :transaction="item" :key="item._id" @submitEvent="getTransaction"
+                    @submitEdit="(id) => findTransactionById(id)" />
             </div>
         </div>
     </div>

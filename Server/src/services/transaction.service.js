@@ -25,7 +25,6 @@ const deleteTransaction = async id => {
 
 const updateTransaction = async (id, newdata) => {
     let { amount, date, category, note } = newdata
-    date = monent.utc(date, 'MM-DD-YYYY').utcOffset('+07:00')
     let data = await transactionDB.findByIdAndUpdate(id, { amount, date, category, note }, { new: true })
     if (!data) return new ApiRes(400, 'failed', 'Không có giao dịch!', null)
     return new ApiRes(200, 'success', 'Cập nhật giao dịch thành công!', data)

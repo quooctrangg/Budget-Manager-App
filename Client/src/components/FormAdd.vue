@@ -11,44 +11,44 @@ const $toast = useToast();
 const props = defineProps(['type'])
 const emits = defineEmits(['submitEvent'])
 
-
-const data = ref({
-    userId: userStore.user._id,
-    amount: '',
-    date: '',
-    type: props.type,
-    category: '',
-    note: ''
-})
+const categoryErr = ref(false)
 
 const submitTransaction = async () => {
-    if (!transactionStore.isShowEdit) {
-        await transactionStore.createTransaction(data.value)
+    if (transactionStore.data.category === '') {
+        categoryErr.value = true
+        return
+    } else {
+        categoryErr.value = false
     }
+
+    if (!transactionStore.isShowEdit) {
+        transactionStore.data.userId = userStore.user._id
+        transactionStore.data.type = props.type
+        await transactionStore.createTransaction(transactionStore.data)
+    } else {
+        await transactionStore.updateTransaction(transactionStore.idTransacton, transactionStore.data)
+    }
+
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
         return
     }
     $toast.success(transactionStore.result.message, { position: 'top-right' })
     emits('submitEvent')
-    data.value.amount = ''
-    data.value.date = ''
-    data.value.category = ''
-    data.value.note = ''
+    transactionStore.resetData()
+    transactionStore.isShowEdit = false
 }
-
-
 </script>
 <template>
     <form class="w-full  flex flex-col gap-3" @submit.prevent="submitTransaction">
-        <input type="number" required v-model="data.amount"
+        <input type="number" required v-model="transactionStore.data.amount"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base"
             placeholder="Số tiền">
-        <input type="date" required v-model="data.date"
+        <input type="date" required v-model="transactionStore.data.date"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
-        <select v-model="data.category"
+        <select v-model="transactionStore.data.category"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
-            <option value="">Chọn</option>
+            <option value="">Chọn loại giao dịch</option>
             <option value="Giải trí">Giải trí</option>
             <option value="Sức khỏe">Sức khỏe</option>
             <option value="Học tập">Học tập</option>
@@ -58,7 +58,8 @@ const submitTransaction = async () => {
             <option value="Quà tặng">Quà tặng</option>
             <option value="Khác">Khác</option>
         </select>
-        <textarea rows="5" placeholder="Ghi chú" maxlength="100" v-model="data.note"
+        <span v-if="categoryErr" class="text-red-500 text-xs">Hãy chọn loại giao dịch!</span>
+        <textarea rows="5" placeholder="Ghi chú" maxlength="100" v-model="transactionStore.data.note"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base"></textarea>
         <div class="w-full flex justify-center">
             <button type="submit" v-if="!transactionStore.isShowEdit"
@@ -67,7 +68,10 @@ const submitTransaction = async () => {
                 Thêm
             </button>
             <div class="flex gap-2" v-else>
-                <button type="button" @click="transactionStore.isShowEdit = false"
+                <button type="button" @click="() => {
+                    transactionStore.isShowEdit = false
+                    transactionStore.idTransacton = null
+                }"
                     class="w-auto border py-1 px-2 rounded-lg bg-red-600 hover:bg-red-400 flex items-center gap-2 text-gray-700">
                     <i class="fa-solid fa-xmark"></i>
                     Hủy
