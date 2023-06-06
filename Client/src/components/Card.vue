@@ -5,7 +5,7 @@ import moment from 'moment'
 
 const $toast = useToast()
 const transactionStore = useTransactionStore()
-const props = defineProps(['transaction'])
+const props = defineProps(['transaction', 'del'])
 const emits = defineEmits(['submitEvent', 'submitEdit'])
 
 const deleteTransaction = async id => {
@@ -59,7 +59,8 @@ const clickShowUpdateTransaction = id => {
             </div>
         </div>
         <div class="p-5">
-            <i class="fa-solid fa-pen-to-square cursor-pointer text-orange-600 hover:text-orange-400"
+            <i v-if="props?.del !== 'no'"
+                class="fa-solid fa-pen-to-square cursor-pointer text-orange-600 hover:text-orange-400"
                 @click="clickShowUpdateTransaction(props.transaction._id)"></i>
             <i class="fa-solid fa-trash cursor-pointer text-red-600 hover:text-red-400"
                 @click="deleteTransaction(props.transaction._id)"></i>

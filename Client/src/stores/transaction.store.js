@@ -57,6 +57,12 @@ export const useTransactionStore = defineStore('transaction', () => {
         }, 0)
     }
 
+    const totalBalance = (value) => {
+        let incomes = sumAmount(filerByType(value, 'incomes'))
+        let expenses = sumAmount(filerByType(value, 'expenses'))
+        return incomes - expenses
+    }
+
     const createTransaction = async data => {
         err.value = null
         result.value = null
@@ -118,7 +124,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     }
 
     return {
-        err, result, isShowEdit, data, idTransacton, setData, resetData, sortByDate, filerByType, sumAmount,
+        err, result, isShowEdit, data, idTransacton, setData, resetData, sortByDate, filerByType, sumAmount, totalBalance,
         createTransaction, findAllTransactionByUserId, deleteTransaction, findTransactionById,
         updateTransaction
     }
