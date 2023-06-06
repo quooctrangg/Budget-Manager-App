@@ -1,19 +1,52 @@
 <script setup>
 import FormAdd from '../components/FormAdd.vue'
 import Card from '../components/Card.vue'
+import { onMounted, ref } from 'vue'
+import { useToast } from 'vue-toast-notification'
+import { useTransactionStore } from '../stores/transaction.store'
+import { useUserStore } from '../stores/user.store'
+
+const transactionStore = useTransactionStore()
+const userStore = useUserStore()
+const $toast = useToast();
+
+const transaction = ref(null)
+const sumAmount = ref(0)
+
+const getTransaction = async () => {
+    await transactionStore.findAllTransactionById(userStore.user._id)
+    if (transactionStore.err) {
+        $toast.error(transactionStore.err, { position: 'top-right' })
+        return
+    }
+    transaction.value = transactionStore.result.data
+    transaction.value = transactionStore.filerByType(transaction.value, 'expenses')
+    transaction.value = transactionStore.sortByDate(transaction.value, 'asc')
+    sumAmount.value = transactionStore.sumAmount(transaction.value)
+}
+
+onMounted(() => {
+    getTransaction()
+})
 </script>
 <template>
     <h1 class="text-2xl font-bold text-indigo-900">Chi Tiêu</h1>
     <div class="w-full h-[100%] mt-2">
         <div class="w-[100%] border-[3px] border-white rounded-xl bg-slate-100 text-center p-4">
-            <h3 class="text-indigo-900">Tổng chi tiêu: <span class="text-red-500 font-bold">5.000.000đ</span></h3>
+            <h3 class="text-indigo-900">Tổng chi tiêu:
+                <span class="text-red-500 font-bold">
+                    {{ Number(sumAmount).toLocaleString('de-DE', {
+                        style: 'currency', currency: 'VND'
+                    }) }}
+                </span>
+            </h3>
         </div>
         <div class="w-full h-[100%] flex mt-5 gap-3">
             <div class="w-[30%] h-full">
-                <FormAdd />
+                <FormAdd :type="'expenses'" @submitEvent="getTransaction" />
             </div>
             <div class="w-[70%] h-[80%] overflow-auto">
-                <Card v-for="t in 4" :key="t" />
+                <Card v-for="item in transaction" :transaction="item" :key="item._id" @submitEvent="getTransaction" />
             </div>
         </div>
     </div>

@@ -7,7 +7,7 @@ const findAllTransactionsByUserId = async userId => {
 }
 
 const createTransaction = async data => {
-    if (data.date) data.date = monent.utc(data.date, 'MM-DD-YYYY').utcOffset('+07:00')
+    if (data.date) data.date = monent.utc(data.date, 'YYYY-MM-DD').utcOffset('+07:00')
     return new ApiRes(200, 'success', 'Tạo giao dịch thành công!', await transactionDB.create(data))
 }
 
