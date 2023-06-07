@@ -1,4 +1,5 @@
 <script setup>
+import Loading from './Loading.vue'
 import Card from '../components/Card.vue'
 import { onMounted, ref } from 'vue'
 import { useTransactionStore } from '../stores/transaction.store'
@@ -15,6 +16,7 @@ const transaction = ref(null)
 const total = ref(0)
 
 const getTransaction = async () => {
+    transaction.value = null
     await transactionStore.findAllTransactionByUserId(userStore.user._id)
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
@@ -110,7 +112,8 @@ onMounted(() => {
                 </form>
             </div>
             <div class="w-[60%] h-[80%] overflow-auto">
-                <Card v-for="item in transaction" :transaction="item" :key="item._id" :del="'no'"
+                <Loading v-if="transaction === null" />
+                <Card v-else v-for="item in transaction" :transaction="item" :key="item._id" :del="'no'"
                     @submitEvent="getTransaction" />
             </div>
         </div>

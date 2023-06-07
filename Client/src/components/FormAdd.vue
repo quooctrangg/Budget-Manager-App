@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import { useTransactionStore } from '../stores/transaction.store'
 import { useUserStore } from '../stores/user.store'
@@ -38,6 +38,16 @@ const submitTransaction = async () => {
     transactionStore.resetData()
     transactionStore.isShowEdit = false
 }
+
+const cancelSubmit = () => {
+    transactionStore.isShowEdit = false
+    transactionStore.idTransacton = null
+    transactionStore.resetData()
+}
+
+onMounted(() => {
+    cancelSubmit()
+})
 </script>
 <template>
     <form class="w-full  flex flex-col gap-3" @submit.prevent="submitTransaction">
@@ -68,10 +78,7 @@ const submitTransaction = async () => {
                 Thêm
             </button>
             <div class="flex gap-2" v-else>
-                <button type="button" @click="() => {
-                    transactionStore.isShowEdit = false
-                    transactionStore.idTransacton = null
-                }"
+                <button type="button" @click="cancelSubmit"
                     class="w-auto border py-1 px-2 rounded-lg bg-red-600 hover:bg-red-400 flex items-center gap-2 text-gray-700">
                     <i class="fa-solid fa-xmark"></i>
                     Hủy
