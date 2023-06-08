@@ -10,20 +10,25 @@ const transactionStore = useTransactionStore()
 const userStore = useUserStore()
 const $toast = useToast();
 
-const selectTime = ref('all')
-const selectArrange = ref('')
+const select = ref({
+    date: 'all',
+    type: 'all',
+    category: 'all',
+    sort: 1,
+    startDate: '',
+    endDate: ''
+})
 const transaction = ref(null)
 const total = ref(0)
 
 const getTransaction = async () => {
     transaction.value = null
-    await transactionStore.findAllTransactionByUserId(userStore.user._id)
+    await transactionStore.findAllTransactionByUserId(userStore.user._id, select.value)
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
         return
     }
     transaction.value = transactionStore.result.data
-    transaction.value = transactionStore.sortByDate(transaction.value, 'asc')
     total.value = transactionStore.totalBalance(transaction.value)
 }
 
@@ -46,10 +51,10 @@ onMounted(() => {
         </div>
         <div class="w-full h-[100%] flex mt-5 gap-3">
             <div class="w-[40%] h-full">
-                <form class="flex flex-col gap-2">
+                <form class="flex flex-col gap-2" @submit.prevent="getTransaction">
                     <div>
                         <label class="text-base">Thời gian:</label>
-                        <select v-model="selectTime"
+                        <select v-model="select.date"
                             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
                             <option value="all">Tất cả</option>
                             <option value="1day">1 ngày qua</option>
@@ -58,21 +63,30 @@ onMounted(() => {
                             <option value="other">Tùy chỉnh...</option>
                         </select>
                     </div>
-                    <div class="flex items-center justify-center gap-2" v-if="selectTime === 'other'">
+                    <div class="flex items-center justify-center gap-2" v-if="select.date === 'other'">
                         <div>
                             <label class="text-sm">Từ ngày:</label>
-                            <input type="date"
+                            <input type="date" v-model="select.startDate"
                                 class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-400">
                         </div>
                         <div>
                             <label class="text-sm">Đến ngày:</label>
-                            <input type="date"
+                            <input type="date" v-model="select.endDate"
                                 class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-400">
                         </div>
                     </div>
                     <div>
+                        <label class="text-base">Giao dịch:</label>
+                        <select v-model="select.type"
+                            class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
+                            <option value="all">Tất cả</option>
+                            <option value="incomes">Thu nhập</option>
+                            <option value="expenses">Chi tiêu</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="text-base">Phân loại:</label>
-                        <select
+                        <select v-model="select.category"
                             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
                             <option value="all">Tất cả</option>
                             <option value="Giải trí">Giải trí</option>
@@ -87,19 +101,10 @@ onMounted(() => {
                     </div>
                     <div>
                         <label class="text-base">Sắp xếp:</label>
-                        <select v-model="selectArrange"
+                        <select v-model="select.sort"
                             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
-                            <option value="">Không</option>
-                            <option value="day">Theo ngày</option>
-                            <option value="price">Theo giá trị</option>
-                        </select>
-                    </div>
-                    <div v-if="selectArrange">
-                        <label class="text-sm">Khác:</label>
-                        <select
-                            class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base">
-                            <option value="asc">Tăng dần</option>
-                            <option value="dec">Giản dần</option>
+                            <option value="1">Tăng dần</option>
+                            <option value="-1">Giảm dần</option>
                         </select>
                     </div>
                     <div>
@@ -112,9 +117,12 @@ onMounted(() => {
                 </form>
             </div>
             <div class="w-[60%] h-[80%] overflow-auto">
-                <Loading v-if="transaction === null" />
+                <Loading v-if="transactionStore.isLoading" />
                 <Card v-else v-for="item in transaction" :transaction="item" :key="item._id" :del="'no'"
                     @submitEvent="getTransaction" />
+                <div v-if="transaction == null" class="w-full h-full flex justify-center items-center">
+                    <span class="text-xl text-red-500 font-bold">Không có giao dịch!</span>
+                </div>
             </div>
         </div>
     </div>
