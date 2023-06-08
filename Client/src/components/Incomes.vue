@@ -60,7 +60,8 @@ onMounted(() => {
                 <Loading v-if="transactionStore.isLoading" />
                 <Card v-else v-for="item in transaction" :transaction="item" :key="item._id" @submitEvent="getTransaction"
                     @submitEdit="(id) => findTransactionById(id)" />
-                <div v-if="transaction == null" class="w-full h-full flex justify-center items-center">
+                <div v-if="transaction == null || transaction?.length == 0"
+                    class="w-full h-full flex justify-center items-center">
                     <span class="text-xl text-red-500 font-bold">Không có giao dịch!</span>
                 </div>
             </div>
