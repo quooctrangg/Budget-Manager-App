@@ -15,15 +15,12 @@ const transaction = ref(null)
 const sumAmount = ref(0)
 
 const getTransaction = async () => {
-    transaction.value = null
-    await transactionStore.findAllTransactionByUserId(userStore.user._id)
+    await transactionStore.findAllTransactionByUserId(userStore.user._id, { sort: 1, type: 'expenses' })
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
         return
     }
     transaction.value = transactionStore.result.data
-    transaction.value = transactionStore.filerByType(transaction.value, 'expenses')
-    transaction.value = transactionStore.sortByDate(transaction.value, 'asc')
     sumAmount.value = transactionStore.sumAmount(transaction.value)
 }
 
@@ -58,9 +55,12 @@ onMounted(() => {
                 <FormAdd :type="'expenses'" @submitEvent="getTransaction" />
             </div>
             <div class="w-[70%] h-[80%] overflow-auto">
-                <Loading v-if="transaction === null" />
+                <Loading v-if="transactionStore.isLoading" />
                 <Card v-else v-for="item in transaction" :transaction="item" :key="item._id" @submitEvent="getTransaction"
                     @submitEdit="(id) => findTransactionById(id)" />
+                <div v-if="transaction == null" class="w-full h-full flex justify-center items-center">
+                    <span class="text-xl text-red-500 font-bold">Không có giao dịch!</span>
+                </div>
             </div>
         </div>
     </div>

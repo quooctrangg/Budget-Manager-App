@@ -21,8 +21,8 @@ class transactionService {
         return (await this.api.get(`/${id}`)).data
     }
 
-    async findTransactionByUserId(userId) {
-        return (await this.api.get(`/user/${userId}`)).data
+    async findTransactionByUserId(userId, select) {
+        return (await this.api.get(`/user/${userId}?${select}`)).data
     }
 
 }

@@ -8,6 +8,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     const err = ref(null)
     const result = ref(null)
     const isShowEdit = ref(false)
+    const isLoading = ref(false)
     const data = ref({
         userId: '',
         amount: '',
@@ -16,7 +17,7 @@ export const useTransactionStore = defineStore('transaction', () => {
         category: '',
         note: ''
     })
-    const idTransacton = ref(null)
+    const idTransaction = ref(null)
 
     const resetData = () => {
         data.value.userId = ''
@@ -34,15 +35,6 @@ export const useTransactionStore = defineStore('transaction', () => {
         data.value.type = newdata.type
         data.value.category = newdata.category
         data.value.note = newdata.note
-    }
-
-    const sortByDate = (value, type) => {
-        return value.sort((a, b) => {
-            let dateA = new Date(a.date);
-            let dateB = new Date(b.date);
-            if (type === 'asc') return dateA - dateB
-            if (type === 'dec') return dateB - dateA
-        })
     }
 
     const filerByType = (value, type) => {
@@ -66,65 +58,83 @@ export const useTransactionStore = defineStore('transaction', () => {
     const createTransaction = async data => {
         err.value = null
         result.value = null
+        isLoading.value = true
         try {
             let res = await transactionService.createTransaction(data)
             if (res.code !== 200) throw new Error(res.message)
             result.value = res
         } catch (error) {
             err.value = error.message
+        } finally {
+            isLoading.value = false
         }
     }
 
-    const findAllTransactionByUserId = async userId => {
+    const findAllTransactionByUserId = async (userId, select) => {
         err.value = null
         result.value = null
+        isLoading.value = true
         try {
-            let res = await transactionService.findTransactionByUserId(userId)
+            let queryString = Object.keys(select)
+                .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(select[key]))
+                .join("&");
+            let res = await transactionService.findTransactionByUserId(userId, queryString)
             if (res.code !== 200) throw new Error(res.message)
             result.value = res
         } catch (error) {
             err.value = error.message
+        } finally {
+            isLoading.value = false
         }
     }
 
     const deleteTransaction = async id => {
         err.value = null
         result.value = null
+        isLoading.value = true
         try {
             let res = await transactionService.deleteTransaction(id)
             if (res.code !== 200) throw new Error(res.message)
             result.value = res
         } catch (error) {
             err.value = error.message
+        } finally {
+            isLoading.value = false
         }
     }
 
     const findTransactionById = async id => {
         err.value = null
         result.value = null
+        isLoading.value = true
         try {
             let res = await transactionService.findTransaction(id)
             if (res.code !== 200) throw new Error(res.message)
             result.value = res
         } catch (error) {
             err.value = error.message
+        } finally {
+            isLoading.value = false
         }
     }
 
     const updateTransaction = async (id, data) => {
         err.value = null
         result.value = null
+        isLoading.value = true
         try {
             let res = await transactionService.updateTransaction(id, data)
             if (res.code !== 200) throw new Error(res.message)
             result.value = res
         } catch (error) {
             err.value = error.message
+        } finally {
+            isLoading.value = false
         }
     }
 
     return {
-        err, result, isShowEdit, data, idTransacton, setData, resetData, sortByDate, filerByType, sumAmount, totalBalance,
+        err, result, isShowEdit, data, idTransaction, isLoading, setData, resetData, sumAmount, totalBalance,
         createTransaction, findAllTransactionByUserId, deleteTransaction, findTransactionById,
         updateTransaction
     }

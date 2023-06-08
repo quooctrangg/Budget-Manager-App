@@ -7,7 +7,6 @@ import { useUserStore } from '../stores/user.store'
 const transactionStore = useTransactionStore()
 const userStore = useUserStore()
 const $toast = useToast();
-
 const props = defineProps(['type'])
 const emits = defineEmits(['submitEvent'])
 
@@ -26,7 +25,7 @@ const submitTransaction = async () => {
         transactionStore.data.type = props.type
         await transactionStore.createTransaction(transactionStore.data)
     } else {
-        await transactionStore.updateTransaction(transactionStore.idTransacton, transactionStore.data)
+        await transactionStore.updateTransaction(transactionStore.idTransaction, transactionStore.data)
     }
 
     if (transactionStore.err) {
@@ -41,7 +40,7 @@ const submitTransaction = async () => {
 
 const cancelSubmit = () => {
     transactionStore.isShowEdit = false
-    transactionStore.idTransacton = null
+    transactionStore.idTransaction = null
     transactionStore.resetData()
 }
 
@@ -51,7 +50,7 @@ onMounted(() => {
 </script>
 <template>
     <form class="w-full  flex flex-col gap-3" @submit.prevent="submitTransaction">
-        <input type="number" required v-model="transactionStore.data.amount"
+        <input type="number" required v-model="transactionStore.data.amount" min="1"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base"
             placeholder="Số tiền">
         <input type="date" required v-model="transactionStore.data.date"

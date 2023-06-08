@@ -15,7 +15,6 @@ const deleteTransaction = async id => {
         return
     }
     $toast.success(transactionStore.result.message, { position: 'top-right' })
-    emits('submitEvent')
 }
 
 const clickShowUpdateTransaction = id => {
@@ -62,8 +61,10 @@ const clickShowUpdateTransaction = id => {
             <i v-if="props?.del !== 'no'"
                 class="fa-solid fa-pen-to-square cursor-pointer text-orange-600 hover:text-orange-400"
                 @click="clickShowUpdateTransaction(props.transaction._id)"></i>
-            <i class="fa-solid fa-trash cursor-pointer text-red-600 hover:text-red-400"
-                @click="deleteTransaction(props.transaction._id)"></i>
+            <i class="fa-solid fa-trash cursor-pointer text-red-600 hover:text-red-400" @click="() => {
+                deleteTransaction(props.transaction._id)
+                emits('submitEvent')
+            }"></i>
         </div>
     </div>
 </template>
