@@ -134,7 +134,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     }
 
     return {
-        err, result, isShowEdit, data, idTransaction, isLoading, setData, resetData, sumAmount, totalBalance,
+        err, result, isShowEdit, data, idTransaction, isLoading, setData, resetData, sumAmount, filerByType, totalBalance,
         createTransaction, findAllTransactionByUserId, deleteTransaction, findTransactionById,
         updateTransaction
     }

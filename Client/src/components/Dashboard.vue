@@ -1,43 +1,42 @@
 <script setup>
-import { ref } from 'vue'
-import { Bar, Doughnut } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js'
+import { ref, onMounted } from 'vue'
+import { useToast } from 'vue-toast-notification'
+import { useTransactionStore } from '../stores/transaction.store'
+import { useUserStore } from '../stores/user.store'
+import ChartLine from '../components/ChartLine.vue'
+import ChartDoughnut from '../components/ChartDoughnut.vue'
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement)
+const transactionStore = useTransactionStore()
+const userStore = useUserStore()
+const $toast = useToast()
 
-const dataBar = {
-    labels: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'],
-    datasets: [
-        {
-            label: 'Thu nhập',
-            backgroundColor: '#f87979',
-            data: [40, 20, 12, 6, 8, 12, 5]
-        },
-        {
-            label: 'Chi tiêu',
-            backgroundColor: '#f87999',
-            data: [50, 20, 12, 7, 10, 4, 6]
-        }
-    ]
+const transaction = ref(null)
+const select = ref({
+    date: 'all',
+    sort: 1,
+    startDate: '',
+    endDate: ''
+})
+const expenses = ref(0)
+const incomes = ref(0)
+const total = ref(0)
+
+const getTransaction = async () => {
+    transaction.value = null
+    await transactionStore.findAllTransactionByUserId(userStore.user._id, select.value)
+    if (transactionStore.err) {
+        $toast.error(transactionStore.err, { position: 'top-right' })
+        return
+    }
+    transaction.value = transactionStore.result.data
+    expenses.value = transactionStore.sumAmount(transactionStore.filerByType(transaction.value, 'expenses'))
+    incomes.value = transactionStore.sumAmount(transactionStore.filerByType(transaction.value, 'incomes'))
+    total.value = incomes.value - expenses.value
 }
 
-const dataDoughnut = {
-    labels: ['Giải trí', 'Sức khỏe', 'Ăn uống', 'Di chuyển', 'Phiếu lương', 'Khác'],
-    datasets: [{
-        label: 'My First Dataset',
-        data: [100, 50, 100, 25, 30, 50],
-        backgroundColor: [
-            'rgb(0, 102, 255)',
-            'rgb(0, 255, 153)',
-            'rgb(255, 204, 153)',
-            'rgb(255, 255, 102)',
-            'rgb(102, 153, 0)',
-            'rgb(102, 153, 153)'
-        ],
-    }]
-}
-
-const selectTime = ref('all')
+onMounted(() => {
+    getTransaction()
+})
 </script>
 <template>
     <div class="h-full flex flex-col justify-around">
@@ -48,7 +47,11 @@ const selectTime = ref('all')
                 </div>
                 <div class="h-full p-2">
                     <h3 class="font-semibold text-base text-gray-600">Tổng thu nhập</h3>
-                    <span class="text-gray-500">15.000.000đ</span>
+                    <span class="text-gray-500">
+                        {{ Number(incomes).toLocaleString('de-DE', {
+                            style: 'currency', currency: 'VND'
+                        }) }}
+                    </span>
                 </div>
             </div>
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
@@ -57,7 +60,11 @@ const selectTime = ref('all')
                 </div>
                 <div class="p-2">
                     <h3 class="font-semibold text-base text-gray-600 ">Tổng chi tiêu</h3>
-                    <span class="text-gray-500">5.000.000đ</span>
+                    <span class="text-gray-500">
+                        {{ Number(expenses).toLocaleString('de-DE', {
+                            style: 'currency', currency: 'VND'
+                        }) }}
+                    </span>
                 </div>
             </div>
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
@@ -66,15 +73,19 @@ const selectTime = ref('all')
                 </div>
                 <div class="p-2">
                     <h3 class="font-semibold text-base text-gray-600 ">Tổng số dư</h3>
-                    <span class="text-gray-500">10.000.000đ</span>
+                    <span class="text-gray-500">
+                        {{ Number(total).toLocaleString('de-DE', {
+                            style: 'currency', currency: 'VND'
+                        }) }}
+                    </span>
                 </div>
             </div>
         </div>
         <div>
-            <form class="flex items-center w-full gap-5 mb-2">
+            <form class="flex items-center w-full gap-5 mb-2" @submit.prevent="getTransaction">
                 <div class="flex items-center gap-1">
                     <label class="text-base">Thời gian:</label>
-                    <select v-model="selectTime"
+                    <select v-model="select.date"
                         class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 p-2 focus:border-green-500 outline-0 text-base">
                         <option value="all">Tất cả</option>
                         <option value="1day">1 ngày qua</option>
@@ -83,15 +94,15 @@ const selectTime = ref('all')
                         <option value="other">Tùy chỉnh...</option>
                     </select>
                 </div>
-                <div class="flex items-center gap-1" v-if="selectTime === 'other'">
+                <div class="flex items-center gap-1" v-if="select.date === 'other'">
                     <div class="flex items-center gap-1">
                         <label class="text-sm">Từ:</label>
-                        <input type="date"
+                        <input type="date" v-model="select.startDate"
                             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-400">
                     </div>
                     <div class="flex items-center gap-1">
                         <label class="text-sm">đến:</label>
-                        <input type="date"
+                        <input type="date" v-model="select.endDate"
                             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-400">
                     </div>
                 </div>
@@ -107,13 +118,13 @@ const selectTime = ref('all')
                 <div class="w-[70%] border-[3px] border-white rounded-xl bg-slate-100 p-2">
                     <h1 class="text-2xl font-bold text-indigo-900 mb-2">Thu nhập và chi tiêu</h1>
                     <div>
-                        <Bar :data="dataBar" class="w-full" />
+                        <ChartLine :transaction="transaction" />
                     </div>
                 </div>
                 <div class="w-[30%] border-[3px] border-white rounded-xl bg-slate-100 p-2">
                     <h1 class="text-2xl font-bold text-indigo-900 mb-2">Chi phí theo danh mục</h1>
                     <div>
-                        <Doughnut :data="dataDoughnut" class="w-full" />
+                        <ChartDoughnut />
                     </div>
                 </div>
             </div>
