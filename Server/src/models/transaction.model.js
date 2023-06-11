@@ -1,10 +1,9 @@
-const mongoose = require('mongoose')
+const { Schema, model } = require('mongoose')
 
-const schema = mongoose.Schema;
-
-const TransactionSchema = new schema({
+const TransactionSchema = new Schema({
     userId: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: "user",
         require: true
     },
     amount: {
@@ -22,7 +21,8 @@ const TransactionSchema = new schema({
         default: Date.now
     },
     category: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: "category",
         require: true
     },
     note: {
@@ -32,4 +32,4 @@ const TransactionSchema = new schema({
     timestamps: true
 })
 
-module.exports = mongoose.model('transaction', TransactionSchema)
+module.exports = model('transaction', TransactionSchema)
