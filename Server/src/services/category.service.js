@@ -6,6 +6,10 @@ const createCategory = async data => {
     return new ApiRes(200, 'success', 'Tạo danh mục thành công!', await categoryDB.create({ name, image }))
 }
 
+const findAllCategorys = async () => {
+    return new ApiRes(200, 'success', '', await categoryDB.find({}))
+}
+
 module.exports = {
-    createCategory
+    createCategory, findAllCategorys
 }

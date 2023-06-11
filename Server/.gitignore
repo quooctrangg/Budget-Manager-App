@@ -1,6 +1,2 @@
 node_modules
 .env
-auth.http
-user.http
-transaction.http
-category.http

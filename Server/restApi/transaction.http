@@ -1,0 +1,34 @@
+@urlDev=http://localhost:8000/api/transaction/
+
+### Create transaction
+POST   {{urlDev}}/
+Content-Type: application/json
+
+{
+   "userId": "647dd504387505c72cfcace6",
+   "amount": "20000",
+   "type": "incomes",
+   "date": "05-08-2023",
+   "category": "648540bc2ea2019e0e8d5d93",
+   "note": "hehehe"
+}
+
+### Find all transactions by userId
+GET {{urlDev}}/user/647dd504387505c72cfcace6
+
+### Find transaction by id
+GET {{urlDev}}/647e9355cabdea553b31fbe4
+
+### Delete transaction by id
+DELETE  {{urlDev}}/647e92ef973fae786c6c661d
+
+### Update transaction by id
+PUT {{urlDev}}/647e936937976ba8ad2a070d
+Content-Type: application/json
+
+{
+   "amount": "210000",
+   "date": "05-07-2023",
+   "category": "Ăn uống",
+   "note": "Ăn hải sản,..."
+}

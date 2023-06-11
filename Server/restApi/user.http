@@ -1,0 +1,10 @@
+@urlDev=http://localhost:8000/api/user/
+
+### Change password
+PUT  {{urlDev}}/647dd504387505c72cfcace6
+Content-Type: application/json
+
+{
+    "oldpassword": "123456",
+    "newpassword": "1234567"
+}

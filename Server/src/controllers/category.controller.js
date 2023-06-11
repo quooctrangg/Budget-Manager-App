@@ -11,6 +11,15 @@ const createCategory = async (req, res, next) => {
     }
 }
 
+const findAllCategorys = async (req, res, next) => {
+    try {
+        let message = await categoryService.findAllCategorys()
+        return res.json(message)
+    } catch (error) {
+        return next(new ApiError(500, error.message))
+    }
+}
+
 module.exports = {
-    createCategory
+    createCategory, findAllCategorys
 }

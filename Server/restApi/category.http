@@ -1,0 +1,13 @@
+@urlDev=http://localhost:8000/api/category/
+
+### Create category
+POST {{urlDev}}/
+Content-Type: application/json
+
+{
+  "name": "Sức khỏe",
+  "image": "Sức khỏe.png"
+}
+
+### Find all category
+GET {{urlDev}}/

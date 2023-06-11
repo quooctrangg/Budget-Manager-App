@@ -38,7 +38,7 @@ const findAllTransactionsByUserId = async (userId, select) => {
     if (type && type != 'all') query.type = type
     if (category && category != 'all') query.category = category
     if (sort == 1 || sort == -1) sortDate.date = sort
-    return new ApiRes(200, 'success', 'Tìm thành công!', await transactionDB.find(query).sort(sortDate))
+    return new ApiRes(200, 'success', 'Tìm thành công!', await transactionDB.find(query).sort(sortDate).populate('category'))
 }
 
 const createTransaction = async data => {
