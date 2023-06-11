@@ -3,7 +3,7 @@ const ApiRes = require('../utils/api-res')
 const monent = require('moment')
 
 const findAllTransactionsByUserId = async (userId, select) => {
-    const { date, type, category, sort, startDate, endDate } = select
+    const { date, type, categoryId, sort, startDate, endDate } = select
     let query = { userId: userId }
     let sortDate = {}
     if (date) {
@@ -36,9 +36,9 @@ const findAllTransactionsByUserId = async (userId, select) => {
         }
     }
     if (type && type != 'all') query.type = type
-    if (category && category != 'all') query.category = category
+    if (categoryId && categoryId != 'all') query.categoryId = categoryId
     if (sort == 1 || sort == -1) sortDate.date = sort
-    return new ApiRes(200, 'success', 'Tìm thành công!', await transactionDB.find(query).sort(sortDate).populate('category'))
+    return new ApiRes(200, 'success', 'Tìm thành công!', await transactionDB.find(query).sort(sortDate).populate('categoryId'))
 }
 
 const createTransaction = async data => {
@@ -59,8 +59,8 @@ const deleteTransaction = async id => {
 }
 
 const updateTransaction = async (id, newdata) => {
-    let { amount, date, category, note } = newdata
-    let data = await transactionDB.findByIdAndUpdate(id, { amount, date, category, note }, { new: true })
+    let { amount, date, categoryId, note } = newdata
+    let data = await transactionDB.findByIdAndUpdate(id, { amount, date, categoryId, note }, { new: true })
     if (!data) return new ApiRes(400, 'failed', 'Không có giao dịch!', null)
     return new ApiRes(200, 'success', 'Cập nhật giao dịch thành công!', data)
 }

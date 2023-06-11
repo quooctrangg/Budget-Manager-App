@@ -30,7 +30,7 @@ const findTransactionById = async id => {
         $toast.error(transactionStore.err, { position: 'top-right' })
         return
     }
-    transactionStore.idTransacton = id
+    transactionStore.idTransaction = id
     transactionStore.setData(transactionStore.result.data)
 }
 

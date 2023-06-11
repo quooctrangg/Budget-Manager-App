@@ -20,7 +20,7 @@ const TransactionSchema = new Schema({
         trim: true,
         default: Date.now
     },
-    category: {
+    categoryId: {
         type: Schema.Types.ObjectId,
         ref: "category",
         require: true

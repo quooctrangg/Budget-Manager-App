@@ -5,21 +5,24 @@ import { onMounted, ref } from 'vue'
 import { useTransactionStore } from '../stores/transaction.store'
 import { useUserStore } from '../stores/user.store'
 import { useToast } from 'vue-toast-notification'
+import { useCategoryStore } from '../stores/category.store'
 
 const transactionStore = useTransactionStore()
 const userStore = useUserStore()
+const categoryStore = useCategoryStore()
 const $toast = useToast();
 
 const select = ref({
     date: 'all',
     type: 'all',
-    category: 'all',
+    categoryId: 'all',
     sort: 1,
     startDate: '',
     endDate: ''
 })
 const transaction = ref(null)
 const total = ref(0)
+const categorys = ref([])
 
 const getTransaction = async () => {
     transaction.value = null
@@ -32,10 +35,19 @@ const getTransaction = async () => {
     total.value = transactionStore.totalBalance(transaction.value)
 }
 
+const findAllCategorys = async () => {
+    await categoryStore.findAllCategorys()
+    if (categoryStore.err) {
+        $toast.error(categoryStore.err, { position: 'top-right' })
+        return
+    }
+    categorys.value = categoryStore.result.data
+}
+
 onMounted(() => {
     getTransaction()
+    findAllCategorys()
 })
-
 </script>
 <template>
     <h1 class="text-2xl font-bold text-indigo-900">Tất Cả Giao Dịch</h1>
@@ -86,17 +98,12 @@ onMounted(() => {
                     </div>
                     <div>
                         <label class="text-base">Phân loại:</label>
-                        <select v-model="select.category"
+                        <select v-model="select.categoryId"
                             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
                             <option value="all">Tất cả</option>
-                            <option value="Giải trí">Giải trí</option>
-                            <option value="Sức khỏe">Sức khỏe</option>
-                            <option value="Học tập">Học tập</option>
-                            <option value="Ăn uống">Ăn uống</option>
-                            <option value="Di chuyển">Di chuyển</option>
-                            <option value="Lương">Lương</option>
-                            <option value="Quà tặng">Quà tặng</option>
-                            <option value="Khác">Khác</option>
+                            <option v-for="category in categorys" :key="category._id" :value="category._id">
+                                {{ category.name }}
+                            </option>
                         </select>
                     </div>
                     <div>

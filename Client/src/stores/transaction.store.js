@@ -14,7 +14,7 @@ export const useTransactionStore = defineStore('transaction', () => {
         amount: '',
         date: '',
         type: '',
-        category: '',
+        categoryId: '',
         note: ''
     })
     const idTransaction = ref(null)
@@ -24,7 +24,7 @@ export const useTransactionStore = defineStore('transaction', () => {
         data.value.amount = ''
         data.value.date = ''
         data.value.type = ''
-        data.value.category = ''
+        data.value.categoryId = ''
         data.value.note = ''
     }
 
@@ -33,7 +33,7 @@ export const useTransactionStore = defineStore('transaction', () => {
         data.value.amount = newdata.amount
         data.value.date = moment(newdata.date).format('YYYY-MM-DD')
         data.value.type = newdata.type
-        data.value.category = newdata.category
+        data.value.categoryId = newdata.categoryId
         data.value.note = newdata.note
     }
 

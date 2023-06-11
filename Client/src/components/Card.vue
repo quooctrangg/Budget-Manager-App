@@ -27,11 +27,12 @@ const clickShowUpdateTransaction = id => {
         class="rounded-md border-[2px] border-white bg-slate-100 bg-opacity-50 w-full p-1 focus:border-green-500 flex justify-between items-center mb-2">
         <div class="flex w-full gap-2">
             <div class="w-[10%]">
-                <img :src="`/` + props.transaction.category + '.png'" alt="">
+                <img :src="`http://localhost:8000/public/` + props.transaction.categoryId.image"
+                    :alt="props.transaction.categoryId.name">
             </div>
             <div class="flex flex-col justify-between">
                 <div :class="props.transaction.type === 'incomes' ? 'text-green-500' : 'text-red-500'">
-                    <h3>{{ props.transaction.category }}</h3>
+                    <h3>{{ props.transaction.categoryId.name }}</h3>
                 </div>
                 <div class="flex gap-5 text-base">
                     <h4 class="flex gap-1 items-center">

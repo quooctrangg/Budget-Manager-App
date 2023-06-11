@@ -3,14 +3,17 @@ import { ref, onMounted } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import { useTransactionStore } from '../stores/transaction.store'
 import { useUserStore } from '../stores/user.store'
+import { useCategoryStore } from '../stores/category.store'
 
 const transactionStore = useTransactionStore()
 const userStore = useUserStore()
+const categoryStore = useCategoryStore()
 const $toast = useToast();
 const props = defineProps(['type'])
 const emits = defineEmits(['submitEvent'])
 
 const categoryErr = ref(false)
+const categorys = ref(null)
 
 const submitTransaction = async () => {
     if (transactionStore.data.category === '') {
@@ -38,6 +41,15 @@ const submitTransaction = async () => {
     transactionStore.isShowEdit = false
 }
 
+const findAllCategorys = async () => {
+    await categoryStore.findAllCategorys()
+    if (categoryStore.err) {
+        $toast.error(categoryStore.err, { position: 'top-right' })
+        return
+    }
+    categorys.value = categoryStore.result.data
+}
+
 const cancelSubmit = () => {
     transactionStore.isShowEdit = false
     transactionStore.idTransaction = null
@@ -46,6 +58,7 @@ const cancelSubmit = () => {
 
 onMounted(() => {
     cancelSubmit()
+    findAllCategorys()
 })
 </script>
 <template>
@@ -55,17 +68,10 @@ onMounted(() => {
             placeholder="Số tiền">
         <input type="date" required v-model="transactionStore.data.date"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
-        <select v-model="transactionStore.data.category"
+        <select v-model="transactionStore.data.categoryId"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
             <option value="">Chọn loại giao dịch</option>
-            <option value="Giải trí">Giải trí</option>
-            <option value="Sức khỏe">Sức khỏe</option>
-            <option value="Học tập">Học tập</option>
-            <option value="Ăn uống">Ăn uống</option>
-            <option value="Di chuyển">Di chuyển</option>
-            <option value="Lương">Lương</option>
-            <option value="Quà tặng">Quà tặng</option>
-            <option value="Khác">Khác</option>
+            <option v-for="category in categorys" :key="category._id" :value="category._id">{{ category.name }}</option>
         </select>
         <span v-if="categoryErr" class="text-red-500 text-xs">Hãy chọn loại giao dịch!</span>
         <textarea rows="5" placeholder="Ghi chú" maxlength="100" v-model="transactionStore.data.note"

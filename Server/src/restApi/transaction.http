@@ -9,7 +9,7 @@ Content-Type: application/json
    "amount": "20000",
    "type": "incomes",
    "date": "05-08-2023",
-   "category": "648540bc2ea2019e0e8d5d93",
+   "categoryId": "648540bc2ea2019e0e8d5d93",
    "note": "hehehe"
 }
 
