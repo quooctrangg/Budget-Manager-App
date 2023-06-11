@@ -31,6 +31,8 @@ const findAllTransactionsByUserId = async (userId, select) => {
             case 'other':
                 start = monent.utc(startDate, 'YYYY-MM-DD').utcOffset('+07:00')
                 end = monent.utc(endDate, 'YYYY-MM-DD').utcOffset('+07:00')
+                if (start > end) return new ApiRes(400, 'failed', 'Ngày bắt đầu không được lớn hơn ngày kết thúc.', null)
+                if (Math.floor((end - start) / (1000 * 60 * 60 * 24)) > 60) return new ApiRes(400, 'failed', 'Tìm kiếm chỉ trong khoảng 60 ngày.', null)
                 query.date = { $gte: start, $lte: end };
                 break
         }

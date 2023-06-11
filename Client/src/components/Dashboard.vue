@@ -11,12 +11,6 @@ const userStore = useUserStore()
 const $toast = useToast()
 
 const transaction = ref(null)
-const select = ref({
-    date: 'all',
-    sort: 1,
-    startDate: '',
-    endDate: ''
-})
 const expenses = ref(0)
 const incomes = ref(0)
 const total = ref(0)
@@ -84,27 +78,13 @@ onMounted(() => {
         <div>
             <form class="flex items-center w-full gap-5 mb-2" @submit.prevent="getTransaction">
                 <div class="flex items-center gap-1">
-                    <label class="text-base">Thời gian:</label>
-                    <select v-model="select.date"
+                    <label class="text-base">Thống kê theo:</label>
+                    <select
                         class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 p-2 focus:border-green-500 outline-0 text-base">
-                        <option value="all">Tất cả</option>
-                        <option value="1day">1 ngày qua</option>
-                        <option value="7days">7 ngày qua</option>
-                        <option value="30days">30 ngày qua</option>
-                        <option value="other">Tùy chỉnh...</option>
+                        <option value="7days">Ngày (7 ngày qua)</option>
+                        <option value="6months">Tháng (6 tháng qua)</option>
+                        <option value="5years">Năm (5 năm qua)</option>
                     </select>
-                </div>
-                <div class="flex items-center gap-1" v-if="select.date === 'other'">
-                    <div class="flex items-center gap-1">
-                        <label class="text-sm">Từ:</label>
-                        <input type="date" v-model="select.startDate"
-                            class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-400">
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <label class="text-sm">đến:</label>
-                        <input type="date" v-model="select.endDate"
-                            class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-400">
-                    </div>
                 </div>
                 <div>
                     <button type="submit"

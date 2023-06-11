@@ -78,12 +78,12 @@ onMounted(() => {
                     <div class="flex items-center justify-center gap-2" v-if="select.date === 'other'">
                         <div>
                             <label class="text-sm">Từ ngày:</label>
-                            <input type="date" v-model="select.startDate"
+                            <input type="date" v-model="select.startDate" :max="select.endDate"
                                 class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-400">
                         </div>
                         <div>
                             <label class="text-sm">Đến ngày:</label>
-                            <input type="date" v-model="select.endDate"
+                            <input type="date" v-model="select.endDate" :min="select.startDate"
                                 class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-400">
                         </div>
                     </div>
