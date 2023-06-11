@@ -3,3 +3,4 @@ node_modules
 auth.http
 user.http
 transaction.http
+category.http
