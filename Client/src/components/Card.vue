@@ -30,39 +30,37 @@ const clickShowUpdateTransaction = id => {
                 <img :src="`http://localhost:8000/public/` + props.transaction.categoryId.image"
                     :alt="props.transaction.categoryId.name">
             </div>
-            <div class="flex flex-col justify-between">
-                <div :class="props.transaction.type === 'incomes' ? 'text-green-500' : 'text-red-500'">
-                    <h3>{{ props.transaction.categoryId.name }}</h3>
-                </div>
-                <div class="flex gap-5 text-base">
-                    <h4 class="flex gap-1 items-center">
-                        <i class="fa-regular fa-money-bill-1"></i>
-                        <span>
-                            {{ Number(props.transaction.amount).toLocaleString('de-DE', {
-                                style: 'currency', currency: 'VND'
-                            }) }}
-                        </span>
-                    </h4>
-                    <h4 class="flex gap-1 items-center">
+            <div class="w-full flex flex-col justify-between">
+                <div :class="props.transaction.type === 'incomes' ? 'text-green-500' : 'text-red-500'"
+                    class="w-full flex gap-10 items-center">
+                    <h3 class="w-full">{{ props.transaction.categoryId.name }}</h3>
+                    <h4 class="w-full flex gap-1 items-center text-gray-600">
                         <i class="fa-regular fa-calendar-days"></i>
                         <span>
                             {{ moment(props.transaction.date).format('DD-MM-YYYY') }}
                         </span>
                     </h4>
-                    <h4 class="flex gap-1 items-center">
-                        <i class="fa-solid fa-message"></i>
-                        <span>
+                </div>
+                <div class="w-full flex gap-5 text-base">
+                    <h4 class="w-[20%] flex gap-1 items-center">
+                        <i class="fa-regular fa-money-bill-1"></i>
+                        {{ Number(props.transaction.amount).toLocaleString('de-DE', {
+                            style: 'currency', currency: 'VND'
+                        }) }}
+                    </h4>
+                    <h4 class="w-[80%]">
+                        <span class="break-words">
+                            <i class="fa-solid fa-message"></i>
                             {{ props.transaction.note }}
                         </span>
                     </h4>
                 </div>
             </div>
         </div>
-        <div class="p-5">
-            <i v-if="props?.del !== 'no'"
-                class="fa-solid fa-pen-to-square cursor-pointer text-orange-600 hover:text-orange-400"
+        <div class="p-5 flex flex-col gap-5 items-center">
+            <i v-if="props?.del !== 'no'" class="fa-solid fa-pen-to-square cursor-pointer text-sky-500 hover:text-sky-400"
                 @click="clickShowUpdateTransaction(props.transaction._id)"></i>
-            <i class="fa-solid fa-trash cursor-pointer text-red-600 hover:text-red-400" @click="() => {
+            <i class="fa-solid fa-trash cursor-pointer text-red-500 hover:text-red-400" @click="() => {
                 deleteTransaction(props.transaction._id)
                 emits('submitEvent')
             }"></i>

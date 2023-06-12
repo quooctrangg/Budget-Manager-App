@@ -4,6 +4,7 @@ import { useToast } from 'vue-toast-notification'
 import { useTransactionStore } from '../stores/transaction.store'
 import { useUserStore } from '../stores/user.store'
 import { useCategoryStore } from '../stores/category.store'
+import moment from 'moment'
 
 const transactionStore = useTransactionStore()
 const userStore = useUserStore()
@@ -14,6 +15,7 @@ const emits = defineEmits(['submitEvent'])
 
 const categoryErr = ref(false)
 const categorys = ref(null)
+const date = ref(new Date())
 
 const submitTransaction = async () => {
     if (transactionStore.data.category === '') {
@@ -63,10 +65,11 @@ onMounted(() => {
 </script>
 <template>
     <form class="w-full  flex flex-col gap-3" @submit.prevent="submitTransaction">
-        <input type="number" required v-model="transactionStore.data.amount" min="1"
+        <input type="number" required v-model="transactionStore.data.amount" :max="props.type == 'expenses' ? -1 : ''"
+            :min="props.type == 'incomes' ? 1 : ''"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base"
             placeholder="Số tiền">
-        <input type="date" required v-model="transactionStore.data.date"
+        <input type="date" required v-model="transactionStore.data.date" :max="moment(date).format('YYYY-MM-DD')"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
         <select v-model="transactionStore.data.categoryId"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
@@ -84,12 +87,12 @@ onMounted(() => {
             </button>
             <div class="flex gap-2" v-else>
                 <button type="button" @click="cancelSubmit"
-                    class="w-auto border py-1 px-2 rounded-lg bg-red-600 hover:bg-red-400 flex items-center gap-2 text-gray-700">
+                    class="w-auto border py-1 px-2 rounded-lg bg-red-500 hover:bg-red-400 flex items-center gap-2 text-gray-600">
                     <i class="fa-solid fa-xmark"></i>
                     Hủy
                 </button>
                 <button type="submit"
-                    class="w-auto border py-1 px-2 rounded-lg bg-orange-600 hover:bg-orange-400 flex items-center gap-2 text-gray-700">
+                    class="w-auto border py-1 px-2 rounded-lg bg-sky-500 hover:bg-sky-400 flex items-center gap-2 text-gray-600">
                     <i class="fa-regular fa-pen-to-square"></i>
                     Cập nhật
                 </button>

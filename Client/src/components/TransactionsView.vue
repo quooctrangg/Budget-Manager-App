@@ -79,12 +79,12 @@ onMounted(() => {
                         <div>
                             <label class="text-sm">Từ ngày:</label>
                             <input type="date" v-model="select.startDate" :max="select.endDate"
-                                class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-400">
+                                class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-600">
                         </div>
                         <div>
                             <label class="text-sm">Đến ngày:</label>
                             <input type="date" v-model="select.endDate" :min="select.startDate"
-                                class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-400">
+                                class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-600">
                         </div>
                     </div>
                     <div>
@@ -116,7 +116,7 @@ onMounted(() => {
                     </div>
                     <div>
                         <button type="submit"
-                            class="w-full border py-1 px-2 rounded-lg bg-green-500 hover:bg-green-300 flex items-center justify-center gap-2 text-gray-700 text-base mt-5">
+                            class="w-full border py-1 px-2 rounded-lg bg-green-500 hover:bg-green-300 flex items-center justify-center gap-2 text-gray-600 text-base mt-5">
                             <i class="fa-solid fa-filter"></i>
                             Lọc
                         </button>

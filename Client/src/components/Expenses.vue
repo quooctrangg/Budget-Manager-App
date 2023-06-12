@@ -15,7 +15,7 @@ const transaction = ref(null)
 const sumAmount = ref(0)
 
 const getTransaction = async () => {
-    await transactionStore.findAllTransactionByUserId(userStore.user._id, { sort: 1, type: 'expenses' })
+    await transactionStore.findAllTransactionByUserId(userStore.user._id, { sort: -1, type: 'expenses' })
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
         return
