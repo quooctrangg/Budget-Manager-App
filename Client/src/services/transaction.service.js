@@ -25,6 +25,9 @@ class transactionService {
         return (await this.api.get(`/user/${userId}?${select}`)).data
     }
 
+    async statisticTransaction(time) {
+        return (await this.api.get(`/statistic/${time}`)).data
+    }
 }
 
 export default new transactionService()

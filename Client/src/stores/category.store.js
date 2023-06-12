@@ -7,7 +7,7 @@ export const useCategoryStore = defineStore('category', () => {
     const err = ref(null)
     const result = ref(null)
 
-    const findAllCategorys = async data => {
+    const findAllCategorys = async () => {
         err.value = null
         result.value = null
         try {

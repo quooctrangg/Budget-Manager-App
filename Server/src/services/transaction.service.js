@@ -69,11 +69,11 @@ const statisticTransaction = async time => {
     switch (time) {
         case '7days':
             startDate.setDate(startDate.getDate() - 7)
-            format = '%Y-%m-%d'
+            format = '%d-%m-%Y'
             break
         case '6months':
             startDate.setMonth(startDate.setMonth() - 6)
-            format = '%Y-%m'
+            format = '%m-%Y'
             break
         case '5years':
             startDate.setFullYear(startDate.setFullYear() - 5)

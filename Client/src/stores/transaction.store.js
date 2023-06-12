@@ -52,7 +52,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     const totalBalance = (value) => {
         let incomes = sumAmount(filerByType(value, 'incomes'))
         let expenses = sumAmount(filerByType(value, 'expenses'))
-        return incomes - expenses
+        return incomes + expenses
     }
 
     const createTransaction = async data => {
@@ -133,9 +133,24 @@ export const useTransactionStore = defineStore('transaction', () => {
         }
     }
 
+    const statisticTransaction = async time => {
+        err.value = null
+        result.value = null
+        isLoading.value = true
+        try {
+            let res = await transactionService.statisticTransaction(time)
+            if (res.code !== 200) throw new Error(res.message)
+            result.value = res
+        } catch (error) {
+            err.value = error.message
+        } finally {
+            isLoading.value = false
+        }
+    }
+
     return {
         err, result, isShowEdit, data, idTransaction, isLoading, setData, resetData, sumAmount, filerByType, totalBalance,
         createTransaction, findAllTransactionByUserId, deleteTransaction, findTransactionById,
-        updateTransaction
+        updateTransaction, statisticTransaction
     }
 })
