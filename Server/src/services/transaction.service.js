@@ -7,32 +7,27 @@ const findAllTransactionsByUserId = async (userId, select) => {
     let query = { userId: userId }
     let sortDate = {}
     if (date) {
-        let start, end
+        const start = new Date()
+        const end = new Date()
         switch (date) {
             case '1day':
-                start = new Date()
                 start.setHours(0, 0, 0, 0)
-                end = new Date()
                 end.setHours(23, 59, 59, 999)
                 query.date = { $gte: start, $lte: end }
                 break
             case '7days':
-                start = new Date()
                 start.setDate(start.getDate() - 7)
-                end = new Date()
                 query.date = { $gte: start, $lte: end }
                 break
             case '30days':
-                start = new Date()
                 start.setDate(start.getDate() - 30)
-                end = new Date()
                 query.date = { $gte: start, $lte: end }
                 break
             case 'other':
                 start = monent.utc(startDate, 'YYYY-MM-DD').utcOffset('+07:00')
                 end = monent.utc(endDate, 'YYYY-MM-DD').utcOffset('+07:00')
-                if (start > end) return new ApiRes(400, 'failed', 'Ngày bắt đầu không được lớn hơn ngày kết thúc.', null)
-                if (Math.floor((end - start) / (1000 * 60 * 60 * 24)) > 60) return new ApiRes(400, 'failed', 'Tìm kiếm chỉ trong khoảng 60 ngày.', null)
+                if (start > end) return new ApiRes(400, 'failed', 'Ngày bắt đầu không được lớn hơn ngày kết thúc!', null)
+                if (Math.floor((end - start) / (1000 * 60 * 60 * 24)) > 60) return new ApiRes(400, 'failed', 'Tìm kiếm chỉ trong khoảng 60 ngày!', null)
                 query.date = { $gte: start, $lte: end };
                 break
         }
@@ -67,10 +62,57 @@ const updateTransaction = async (id, newdata) => {
     return new ApiRes(200, 'success', 'Cập nhật giao dịch thành công!', data)
 }
 
+const statisticTransaction = async time => {
+    const startDate = new Date()
+    const endDate = new Date()
+    let format = ''
+    switch (time) {
+        case '7days':
+            startDate.setDate(startDate.getDate() - 7)
+            format = '%Y-%m-%d'
+            break
+        case '6months':
+            startDate.setMonth(startDate.setMonth() - 6)
+            format = '%Y-%m'
+            break
+        case '5years':
+            startDate.setFullYear(startDate.setFullYear() - 5)
+            format = '%Y'
+            break
+        default:
+            return new ApiRes(400, 'failed', 'Yêu cầu không đúng!', null)
+    }
+    let chartLine = await transactionDB.aggregate([
+        { $match: { date: { $gte: startDate, $lte: endDate } } },
+        {
+            $group: {
+                _id: {
+                    date: { $dateToString: { format, date: "$date" } },
+                    type: "$type"
+                },
+                totalAmount: { $sum: "$amount" }
+            }
+        }
+    ])
+    let chartDoughnut = await transactionDB.aggregate([
+        {
+            $match: { date: { $gte: startDate, $lte: endDate } }
+        },
+        {
+            $group: {
+                _id: "$categoryId",
+                totalAmount: { $sum: "$amount" }
+            }
+        }
+    ])
+    return new ApiRes(200, 'success', 'Đã nhóm dữ liệu thành công!', { chartLine, chartDoughnut })
+}
+
 module.exports = {
     findAllTransactionsByUserId,
     createTransaction,
     findByIdTransaction,
     deleteTransaction,
-    updateTransaction
+    updateTransaction,
+    statisticTransaction
 }

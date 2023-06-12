@@ -51,10 +51,21 @@ const updateTransaction = async (req, res, next) => {
     }
 }
 
+const statisticTransaction = async (req, res, next) => {
+    if (!req.params) return next(new ApiError(400, 'Thiếu tham số bắt buộc!'))
+    try {
+        let message = await transactionService.statisticTransaction(req.params.time)
+        return res.json(message)
+    } catch (error) {
+        return next(new ApiError(500, error.message))
+    }
+}
+
 module.exports = {
     findAllTransactionsByUserId,
     createTransaction,
     findByIdTransaction,
     deleteTransaction,
-    updateTransaction
+    updateTransaction,
+    statisticTransaction
 }

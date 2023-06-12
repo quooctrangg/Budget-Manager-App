@@ -32,3 +32,8 @@ Content-Type: application/json
    "category": "Ăn uống",
    "note": "Ăn hải sản,..."
 }
+
+### Statistic transaction
+GET {{urlDev}}/statistic/7days
+
+
