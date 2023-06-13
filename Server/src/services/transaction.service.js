@@ -100,7 +100,10 @@ const statisticTransaction = async time => {
         },
         {
             $group: {
-                _id: "$categoryId",
+                _id: {
+                    categoryId: "$categoryId",
+                    type: "$type"
+                },
                 totalAmount: { $sum: "$amount" }
             }
         }
