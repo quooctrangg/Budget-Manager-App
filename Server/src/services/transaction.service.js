@@ -62,7 +62,7 @@ const updateTransaction = async (id, newdata) => {
     return new ApiRes(200, 'success', 'Cập nhật giao dịch thành công!', data)
 }
 
-const statisticTransaction = async time => {
+const statisticTransaction = async (userId, time) => {
     const startDate = new Date()
     const endDate = new Date()
     let format = ''
@@ -87,6 +87,7 @@ const statisticTransaction = async time => {
         {
             $group: {
                 _id: {
+                    userId: "$userId",
                     date: { $dateToString: { format, date: "$date" } },
                     type: "$type"
                 },
@@ -95,12 +96,11 @@ const statisticTransaction = async time => {
         }
     ])
     let chartDoughnut = await transactionDB.aggregate([
-        {
-            $match: { date: { $gte: startDate, $lte: endDate } }
-        },
+        { $match: { date: { $gte: startDate, $lte: endDate } } },
         {
             $group: {
                 _id: {
+                    userId: "$userId",
                     categoryId: "$categoryId",
                     type: "$type"
                 },
@@ -108,6 +108,8 @@ const statisticTransaction = async time => {
             }
         }
     ])
+    chartLine = chartLine.filter(e => e._id.userId == userId)
+    chartDoughnut = chartDoughnut.filter(e => e._id.userId == userId)
     return new ApiRes(200, 'success', 'Đã nhóm dữ liệu thành công!', { chartLine, chartDoughnut })
 }
 

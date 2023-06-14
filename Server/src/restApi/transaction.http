@@ -34,6 +34,6 @@ Content-Type: application/json
 }
 
 ### Statistic transaction
-GET {{urlDev}}/statistic/7days
+GET {{urlDev}}/statistic/647dd504387505c72cfcace6-7days
 
 

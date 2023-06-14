@@ -8,7 +8,7 @@ router.route('/')
 router.route('/user/:userId')
     .get(transaction.findAllTransactionsByUserId)
 
-router.route('/statistic/:time')
+router.route('/statistic/:userId-:time')
     .get(transaction.statisticTransaction)
 
 router.route('/:id')
