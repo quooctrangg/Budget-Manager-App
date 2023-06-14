@@ -133,12 +133,12 @@ export const useTransactionStore = defineStore('transaction', () => {
         }
     }
 
-    const statisticTransaction = async time => {
+    const statisticTransaction = async (userId, time) => {
         err.value = null
         result.value = null
         isLoading.value = true
         try {
-            let res = await transactionService.statisticTransaction(time)
+            let res = await transactionService.statisticTransaction(userId, time)
             if (res.code !== 200) throw new Error(res.message)
             result.value = res
         } catch (error) {

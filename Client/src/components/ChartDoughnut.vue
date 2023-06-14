@@ -4,13 +4,16 @@ import { Doughnut } from 'vue-chartjs'
 import { Chart as ChartJs, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from 'chart.js'
 import { useTransactionStore } from '../stores/transaction.store'
 import { useCategoryStore } from '../stores/category.store'
+import { useUserStore } from '../stores/user.store'
 import { useToast } from 'vue-toast-notification'
+import Loading from './Loading.vue'
 
 const transactionStore = useTransactionStore()
 const categoryStore = useCategoryStore()
+const userStore = useUserStore()
 const $toast = useToast()
 
-const props = defineProps(['data', 'type'])
+const props = defineProps(['data'])
 
 ChartJs.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement)
 
@@ -18,6 +21,7 @@ const color = ['rgb(255, 0, 0)', 'rgb(255, 128, 0)', 'rgb(255, 255, 0)', 'rgb(12
     'rgb(0, 255, 255)', 'rgb(0, 128, 255)', 'rgb(0, 0, 255)', 'rgb(127, 0, 255)', 'rgb(255, 0, 255)', 'rgb(255, 0, 127)', 'rgb(128, 128, 128)']
 const options = { responsive: true, aspectRatio: 2, maintainAspectRatio: false }
 
+const isLoading = ref(false)
 const dataDoughnutIncomes = reactive({
     labels: [],
     datasets: [{
@@ -36,7 +40,6 @@ const dataDoughnutExpenses = reactive({
     }],
     options
 })
-const isLoading = ref(false)
 
 const setCategorysDoughnut = async () => {
     await categoryStore.findAllCategorys()
@@ -48,7 +51,7 @@ const setCategorysDoughnut = async () => {
 }
 
 const getStatistic = async (time) => {
-    await transactionStore.statisticTransaction(time)
+    await transactionStore.statisticTransaction(userStore.user._id, time)
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
         return
@@ -57,21 +60,21 @@ const getStatistic = async (time) => {
 }
 
 const setDataDoughnut = (categoryArray, dataArray) => {
-    categoryArray.map(e => {
-        dataDoughnutIncomes.labels.push(e.name)
-        dataDoughnutExpenses.labels.push(e.name)
-    })
+    dataDoughnutIncomes.labels = []
+    dataDoughnutExpenses.labels = []
+    dataDoughnutIncomes.datasets[0].data = []
+    dataDoughnutExpenses.datasets[0].data = []
     categoryArray.map(e => {
         dataArray.forEach(element => {
             if (element._id.categoryId == e._id && element._id.type == 'incomes') {
                 dataDoughnutIncomes.datasets[0].data.push(element.totalAmount)
+                dataDoughnutIncomes.labels.push(e.name)
             }
             if (element._id.categoryId == e._id && element._id.type == 'expenses') {
                 dataDoughnutExpenses.datasets[0].data.push(element.totalAmount)
+                dataDoughnutExpenses.labels.push(e.name)
             }
         })
-        if (!dataDoughnutExpenses.datasets[0].data) dataDoughnutExpenses.datasets[0].data.push(0)
-        if (!dataDoughnutIncomes.datasets[0].data) dataDoughnutIncomes.datasets[0].data.push(0)
     })
 }
 
@@ -93,14 +96,18 @@ onMounted(async () => {
 })
 </script>
 <template>
-    <div class="flex gap-10">
-        <div class="max-w-[400px] text-lg text-gray-700 mb-2 border-[3px] border-white rounded-xl bg-slate-100 p-2">
-            <h3 class="text-lg text-gray-700 mb-2">Thu nhập</h3>
-            <Doughnut v-if="!isLoading" :data="chartIncomes" class="w-full" />
+    <Loading v-if="isLoading" />
+    <div v-else
+        class="flex gap-10 justify-center text-lg text-gray-700 border-[3px] border-white rounded-xl bg-slate-100 p-2">
+        <div class="flex flex-col justify-center items-center flex-1">
+            <div v-if="!chartIncomes.datasets[0].data.length" class="text-red-500">Chưa có dữ liệu...</div>
+            <Doughnut v-else :data="chartIncomes" class="w-full h-full" />
+            <h3>Thu nhập</h3>
         </div>
-        <div class="max-w-[400px] text-lg text-gray-700 mb-2 border-[3px] border-white rounded-xl bg-slate-100 p-2">
+        <div class="flex flex-col justify-center items-center flex-1">
+            <div v-if="!chartExpenses.datasets[0].data.length" class="text-red-500">Chưa có dữ liệu...</div>
+            <Doughnut v-else :data="chartExpenses" class="w-full h-full" />
             <h3>Chi tiêu</h3>
-            <Doughnut v-if="!isLoading" :data="chartExpenses" class="w-full" />
         </div>
     </div>
 </template>

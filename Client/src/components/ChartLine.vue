@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, watch, computed, onMounted } from 'vue'
 import { useTransactionStore } from '../stores/transaction.store'
+import { useUserStore } from '../stores/user.store'
 import { Line } from 'vue-chartjs'
 import { useToast } from 'vue-toast-notification'
 import { Chart as ChartJs, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from 'chart.js/auto'
@@ -8,6 +9,7 @@ import moment from 'moment'
 import Loading from '../components/Loading.vue'
 
 const transactionStore = useTransactionStore()
+const userStore = useUserStore()
 const $toast = useToast()
 
 const props = defineProps(['data'])
@@ -36,7 +38,7 @@ const dataLine = reactive({
     options: {
         responsive: true,
         aspectRatio: 2,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
     }
 })
 
@@ -70,7 +72,7 @@ const setDateLine = time => {
 }
 
 const getStatistic = async (time) => {
-    await transactionStore.statisticTransaction(time)
+    await transactionStore.statisticTransaction(userStore.user._id, time)
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
         return
@@ -117,5 +119,5 @@ onMounted(async () => {
 </script>
 <template>
     <Loading v-if="isLoading" />
-    <Line v-else :data="chartData" class="w-full h-full" />
+    <Line v-else :height="120" :data="chartData" />
 </template>

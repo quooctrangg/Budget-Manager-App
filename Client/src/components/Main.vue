@@ -11,10 +11,10 @@ const navbarStore = useNavbarStore()
 </script>
 <template>
     <div class="p-3 relative">
-        <Dashboard v-if="navbarStore.activeIndex === 0" />
-        <TransactionsView v-if="navbarStore.activeIndex === 1" />
-        <Incomes v-if="navbarStore.activeIndex === 2" />
-        <Expenses v-if="navbarStore.activeIndex === 3" />
+        <Dashboard v-if="navbarStore.activeIndex === 0" class="h-[100%]" />
+        <TransactionsView v-if="navbarStore.activeIndex === 1" class="h-[100%]" />
+        <Incomes v-if="navbarStore.activeIndex === 2" class="h-[100%]" />
+        <Expenses v-if="navbarStore.activeIndex === 3" class="h-[100%]" />
         <ChangePasswordForm v-if="navbarStore.isShow" v-show="navbarStore.isShow" />
     </div>
 </template>

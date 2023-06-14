@@ -25,8 +25,8 @@ class transactionService {
         return (await this.api.get(`/user/${userId}?${select}`)).data
     }
 
-    async statisticTransaction(time) {
-        return (await this.api.get(`/statistic/${time}`)).data
+    async statisticTransaction(userId, time) {
+        return (await this.api.get(`/statistic/${userId}-${time}`)).data
     }
 }
 
