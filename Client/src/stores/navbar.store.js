@@ -16,4 +16,10 @@ export const useNavbarStore = defineStore('navbar', () => {
     }
 
     return { activeIndex, navbarItems, isShow, changeIsShow }
+}, {
+    persist: {
+        key: 'navbar',
+        paths: ['activeIndex'],
+        storage: sessionStorage
+    }
 })
