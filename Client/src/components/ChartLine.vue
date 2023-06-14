@@ -32,7 +32,12 @@ const dataLine = reactive({
             data: [],
             tension: 0.2
         }
-    ]
+    ],
+    options: {
+        responsive: true,
+        aspectRatio: 2,
+        maintainAspectRatio: false
+    }
 })
 
 const setDateLine = time => {
@@ -112,5 +117,5 @@ onMounted(async () => {
 </script>
 <template>
     <Loading v-if="isLoading" />
-    <Line v-else :data="chartData" class="w-full" />
+    <Line v-else :data="chartData" class="w-full h-full" />
 </template>
