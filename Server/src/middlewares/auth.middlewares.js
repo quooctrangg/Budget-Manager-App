@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 const userDB = require('../models/user.model')
 const ApiRes = require('../utils/api-res')
-const ApiError = require('../utils/api-error')
 require('dotenv')
 
 const checkLogin = async (req, res, next) => {
