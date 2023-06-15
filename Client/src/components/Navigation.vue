@@ -55,6 +55,5 @@ const submitLogout = async () => {
                 Đăng xuất
             </button>
         </div>
-
     </div>
 </template>

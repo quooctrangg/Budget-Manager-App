@@ -10,6 +10,7 @@ const transactionStore = useTransactionStore()
 const userStore = useUserStore()
 const categoryStore = useCategoryStore()
 const $toast = useToast();
+
 const props = defineProps(['type'])
 const emits = defineEmits(['submitEvent'])
 

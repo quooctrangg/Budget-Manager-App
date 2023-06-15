@@ -5,6 +5,24 @@ import ChartLine from './ChartLine.vue'
 
 const time = ref('7days')
 const chart = ref('line')
+const totalIncomes = ref(0)
+const totalExpenses = ref(0)
+const totalBalance = ref(0)
+
+const handleTotal = (data) => {
+    totalIncomes.value = 0
+    totalExpenses.value = 0
+    totalBalance.value = 0
+    data.forEach(element => {
+        if (element._id.type == 'incomes') {
+            totalIncomes.value += element.totalAmount
+        }
+        if (element._id.type == 'expenses') {
+            totalExpenses.value += element.totalAmount
+        }
+    })
+    totalBalance.value = totalExpenses.value + totalIncomes.value
+}
 </script>
 <template>
     <div class="flex flex-col gap-2">
@@ -17,7 +35,7 @@ const chart = ref('line')
                     <h3 class="font-semibold text-base text-gray-600">Tổng thu nhập</h3>
                     <span class="text-gray-500">
                         {{
-                            Number(0).toLocaleString('de-DE', { style: 'currency', currency: 'VND' })
+                            Number(totalIncomes).toLocaleString('de-DE', { style: 'currency', currency: 'VND' })
                         }}
                     </span>
                 </div>
@@ -30,7 +48,7 @@ const chart = ref('line')
                     <h3 class="font-semibold text-base text-gray-600 ">Tổng chi tiêu</h3>
                     <span class="text-gray-500">
                         {{
-                            Number(0).toLocaleString('de-DE', { style: 'currency', currency: 'VND' })
+                            Number(totalExpenses).toLocaleString('de-DE', { style: 'currency', currency: 'VND' })
                         }}
                     </span>
                 </div>
@@ -43,7 +61,7 @@ const chart = ref('line')
                     <h3 class="font-semibold text-base text-gray-600 ">Tổng số dư</h3>
                     <span class="text-gray-500">
                         {{
-                            Number(0).toLocaleString('de-DE', { style: 'currency', currency: 'VND' })
+                            Number(totalBalance).toLocaleString('de-DE', { style: 'currency', currency: 'VND' })
                         }}
                     </span>
                 </div>
@@ -79,11 +97,11 @@ const chart = ref('line')
         <div class="flex-1">
             <div v-if="chart == 'line'" class="border-[3px] border-white rounded-xl bg-slate-100 p-2 h-[100%]">
                 <h1 class="text-2xl font-bold text-indigo-900 mb-2">Thu nhập và chi tiêu</h1>
-                <ChartLine :data="time" class="flex-1" />
+                <ChartLine :data="time" @datatotal="(data) => { handleTotal(data) }" class="flex-1" />
             </div>
             <div v-else class="h-[100%] flex flex-col">
                 <h1 class="text-2xl font-bold text-indigo-900 mb-2">Chi phí theo danh mục</h1>
-                <ChartDoughnut :data="time" class="flex-1" />
+                <ChartDoughnut :data="time" @datatotal="(data) => { handleTotal(data) }" class="flex-1" />
             </div>
         </div>
     </div>

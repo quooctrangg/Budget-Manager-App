@@ -13,7 +13,8 @@ export const useUserStore = defineStore('user', () => {
 
     const nameFilter = () => {
         let name = user.value.email || ''
-        return name.slice(0, name.indexOf('@'))
+        name = name.slice(0, name.indexOf('@'))
+        return name.charAt(0).toUpperCase() + name.slice(1)
     }
 
     const changPassword = async (data) => {

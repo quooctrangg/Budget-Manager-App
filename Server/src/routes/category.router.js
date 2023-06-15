@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.route('/')
     .get(category.findAllCategorys)
-    .post(category.createCategory)
+//.post(category.createCategory)
 
 module.exports = router

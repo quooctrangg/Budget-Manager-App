@@ -5,16 +5,19 @@ import moment from 'moment'
 
 const $toast = useToast()
 const transactionStore = useTransactionStore()
+
 const props = defineProps(['transaction', 'del'])
 const emits = defineEmits(['submitEvent', 'submitEdit'])
 
 const deleteTransaction = async id => {
-    await transactionStore.deleteTransaction(id)
-    if (transactionStore.err) {
-        $toast.error(transactionStore.err, { position: 'top-right' })
-        return
+    if (confirm('Bạn chắc chắn muốn xóa?')) {
+        await transactionStore.deleteTransaction(id)
+        if (transactionStore.err) {
+            $toast.error(transactionStore.err, { position: 'top-right' })
+            return
+        }
+        $toast.success(transactionStore.result.message, { position: 'top-right' })
     }
-    $toast.success(transactionStore.result.message, { position: 'top-right' })
 }
 
 const clickShowUpdateTransaction = id => {

@@ -14,11 +14,12 @@ const userStore = useUserStore()
 const $toast = useToast()
 
 const props = defineProps(['data'])
+const emits = defineEmits(['datatotal'])
 
 ChartJs.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement)
 
-const color = ['rgb(255, 0, 0)', 'rgb(255, 128, 0)', 'rgb(255, 255, 0)', 'rgb(128, 255, 0)', 'rgb(0, 255, 0)', 'rgb(0, 255, 128)',
-    'rgb(0, 255, 255)', 'rgb(0, 128, 255)', 'rgb(0, 0, 255)', 'rgb(127, 0, 255)', 'rgb(255, 0, 255)', 'rgb(255, 0, 127)', 'rgb(128, 128, 128)']
+const color = ['rgba(255, 0, 0, 0.7)', 'rgba(255, 128, 0, 0.7)', 'rgba(255, 255, 0,0.7)', 'rgba(128, 255, 0,0.7)', 'rgba(0, 255, 0, 0.7)', 'rgba(0, 255, 128, 0.7)',
+    'rgba(0, 255, 255, 0.7)', 'rgba(0, 128, 255, 0.7)', 'rgba(0, 0, 255, 0.7)', 'rgba(127, 0, 255, 0.7)', 'rgba(255, 0, 255, 0.7)', 'rgba(255, 0, 127, 0.7)', 'rgba(128, 128, 128, 0.7)']
 const options = { responsive: true, aspectRatio: 2, maintainAspectRatio: false }
 
 const isLoading = ref(false)
@@ -76,9 +77,11 @@ const setDataDoughnut = (categoryArray, dataArray) => {
             }
         })
     })
+    emits('datatotal', transactionStore.result.data.chartLine)
 }
 
 const chartIncomes = computed(() => { return { ...dataDoughnutIncomes } })
+
 const chartExpenses = computed(() => { return { ...dataDoughnutExpenses } })
 
 const getDoughnut = async (value) => {

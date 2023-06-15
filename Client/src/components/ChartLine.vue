@@ -13,6 +13,7 @@ const userStore = useUserStore()
 const $toast = useToast()
 
 const props = defineProps(['data'])
+const emits = defineEmits(['datatotal'])
 
 ChartJs.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement)
 
@@ -99,6 +100,7 @@ const setDataLine = (dateArray, dataArray) => {
         if (!dataLine.datasets[0].data[index]) dataLine.datasets[0].data.push(0)
         if (!dataLine.datasets[1].data[index]) dataLine.datasets[1].data.push(0)
     })
+    emits('datatotal', transactionStore.result.data.chartLine)
 }
 
 const chartData = computed(() => { return { ...dataLine } })
