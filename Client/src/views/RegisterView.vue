@@ -69,7 +69,7 @@ const submitRegister = async () => {
                         </button>
                         <p class="text-xs font-light text-gray-500">
                             Đã có tài khoản?
-                            <router-link class="font-medium text-primary-600 hover:underline hover:text-red-600"
+                            <router-link class="font-medium text-sky-500 underline hover:text-red-600"
                                 :to="{ name: 'login' }">
                                 Đăng nhập
                             </router-link>
