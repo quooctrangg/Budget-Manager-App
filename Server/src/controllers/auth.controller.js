@@ -18,7 +18,7 @@ const loginUser = async (req, res, next) => {
         let message = await authService.loginUser(req.body)
         if (message.code !== 400) {
             res.cookie('Token', message.data.token, {
-                httpOnly: true,
+                httpOnly: false,
                 secure: false,
                 path: '/',
                 sameSite: 'strict'

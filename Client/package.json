@@ -11,13 +11,15 @@
     "@fortawesome/fontawesome-free": "^6.4.0",
     "axios": "^1.4.0",
     "chart.js": "^4.3.0",
+    "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",
     "pinia": "^2.0.36",
     "pinia-plugin-persistedstate": "^3.1.0",
     "vue": "^3.3.2",
     "vue-chartjs": "^5.2.0",
     "vue-router": "^4.2.0",
-    "vue-toast-notification": "^3.1.1"
+    "vue-toast-notification": "^3.1.1",
+    "vue3-cookies": "^1.0.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import VueCookies from 'vue3-cookies'
 
 import App from './App.vue'
 import router from './router'
@@ -14,4 +15,10 @@ const pinia = createPinia()
 
 pinia.use(piniaPluginPersistedstate)
 
-createApp(App).use(router).use(pinia).mount('#app')
+createApp(App).use(router).use(pinia).use(VueCookies, {
+    expireTimes: "30d",
+    path: "/",
+    domain: "localhost",
+    secure: true,
+    sameSite: "None",
+}).mount('#app')
