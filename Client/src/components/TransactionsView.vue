@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useTransactionStore } from '../stores/transaction.store'
 import { useUserStore } from '../stores/user.store'
 import { useToast } from 'vue-toast-notification'
@@ -39,8 +39,8 @@ const getTransaction = async () => {
     totalBalance.value = totalExpenses.value + totalIncomes.value
 }
 
-const findAllCategorys = async () => {
-    await categoryStore.findAllCategorys()
+const findAllCategorys = async (type) => {
+    await categoryStore.findAllCategorys(type)
     if (categoryStore.err) {
         $toast.error(categoryStore.err, { position: 'top-right' })
         return
@@ -48,9 +48,16 @@ const findAllCategorys = async () => {
     categorys.value = categoryStore.result.data
 }
 
+watch(() => select.value.type, async () => {
+    if (select.value.type == 'all') {
+        categorys.value = []
+    } else {
+        await findAllCategorys(select.value.type)
+    }
+})
+
 onMounted(() => {
     getTransaction()
-    findAllCategorys()
 })
 </script>
 <template>

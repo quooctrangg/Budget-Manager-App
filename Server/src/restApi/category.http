@@ -5,8 +5,9 @@ POST {{urlDev}}/
 Content-Type: application/json
 
 {
-  "name": "Sức khỏe",
-  "image": "Sức khỏe.png"
+  "name": "Khác ",
+  "image": "Khác.png",
+  "type": 1
 }
 
 ### Find all category

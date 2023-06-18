@@ -47,7 +47,6 @@ const clickShowUpdateTransaction = id => {
                 </div>
                 <div class="w-full flex gap-5 text-base">
                     <h4 class="w-[20%] flex gap-1 items-center">
-                        <i class="fa-regular fa-money-bill-1"></i>
                         {{ Number(props.transaction.amount).toLocaleString('de-DE') + ' VNĐ' }}
                     </h4>
                     <h4 class="w-[80%]">
