@@ -19,7 +19,7 @@ const categorys = ref(null)
 const date = ref(new Date())
 
 const submitTransaction = async () => {
-    if (transactionStore.data.category === '') {
+    if (transactionStore.data.categoryId === '') {
         categoryErr.value = true
         return
     } else {
@@ -45,7 +45,7 @@ const submitTransaction = async () => {
 }
 
 const findAllCategorys = async () => {
-    await categoryStore.findAllCategorys()
+    await categoryStore.findAllCategorys(props.type)
     if (categoryStore.err) {
         $toast.error(categoryStore.err, { position: 'top-right' })
         return
@@ -66,8 +66,8 @@ onMounted(() => {
 </script>
 <template>
     <form class="w-full  flex flex-col gap-3" @submit.prevent="submitTransaction">
-        <input type="number" required v-model="transactionStore.data.amount" :max="props.type == 'expenses' ? -1 : ''"
-            :min="props.type == 'incomes' ? 1 : ''"
+        <input type="number" required v-model="transactionStore.data.amount" :max="props.type == -1 ? -1 : ''"
+            :min="props.type == 1 ? 1 : ''"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base"
             placeholder="Số tiền">
         <input type="date" required v-model="transactionStore.data.date" :max="moment(date).format('YYYY-MM-DD')"

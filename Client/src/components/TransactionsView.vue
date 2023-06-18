@@ -21,8 +21,10 @@ const select = ref({
     endDate: ''
 })
 const transaction = ref(null)
-const total = ref(0)
 const categorys = ref([])
+const totalIncomes = ref(0)
+const totalExpenses = ref(0)
+const totalBalance = ref(0)
 
 const getTransaction = async () => {
     transaction.value = null
@@ -32,7 +34,9 @@ const getTransaction = async () => {
         return
     }
     transaction.value = transactionStore.result.data
-    total.value = transactionStore.totalBalance(transaction.value)
+    totalExpenses.value = transactionStore.sumAmount(transactionStore.filerByType(transaction.value, -1))
+    totalIncomes.value = transactionStore.sumAmount(transactionStore.filerByType(transaction.value, 1))
+    totalBalance.value = totalExpenses.value + totalIncomes.value
 }
 
 const findAllCategorys = async () => {
@@ -52,12 +56,20 @@ onMounted(() => {
 <template>
     <h1 class="text-2xl font-bold text-indigo-900">Tất Cả Giao Dịch</h1>
     <div class="w-full h-[100%] mt-2">
-        <div class="w-[100%] border-[3px] border-white rounded-xl bg-slate-100 text-center p-4">
+        <div class="w-[100%] border-[3px] border-white rounded-xl bg-slate-100 text-center p-4 flex justify-around">
+            <h3 class="text-indigo-900">Tổng thu nhập:
+                <span class="text-green-500 font-bold">
+                    {{ Number(totalIncomes).toLocaleString('de-DE') + ' VNĐ' }}
+                </span>
+            </h3>
+            <h3 class="text-indigo-900">Tổng chi tiêu:
+                <span class="text-red-500 font-bold">
+                    {{ Number(totalExpenses).toLocaleString('de-DE') + ' VNĐ' }}
+                </span>
+            </h3>
             <h3 class="text-indigo-900">Tổng số dư:
-                <span :class="total >= 0 ? 'text-green-500' : 'text-red-500'" class="font-bold">
-                    {{ Number(total).toLocaleString('de-DE', {
-                        style: 'currency', currency: 'VND'
-                    }) }}
+                <span :class="totalBalance >= 0 ? 'text-green-500' : 'text-red-500'" class="font-bold">
+                    {{ Number(totalBalance).toLocaleString('de-DE') + ' VNĐ' }}
                 </span>
             </h3>
         </div>
@@ -92,8 +104,8 @@ onMounted(() => {
                         <select v-model="select.type"
                             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
                             <option value="all">Tất cả</option>
-                            <option value="incomes">Thu nhập</option>
-                            <option value="expenses">Chi tiêu</option>
+                            <option value="1">Thu nhập</option>
+                            <option value="-1">Chi tiêu</option>
                         </select>
                     </div>
                     <div>

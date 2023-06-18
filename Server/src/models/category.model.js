@@ -8,9 +8,11 @@ const CategorySchema = new Schema({
     },
     image: {
         type: String
+    },
+    type: {
+        type: Number,
+        require: true
     }
-}, {
-    timestamps: true
 })
 
 module.exports = model('category', CategorySchema)

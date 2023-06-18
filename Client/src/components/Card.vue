@@ -18,6 +18,7 @@ const deleteTransaction = async id => {
         }
         $toast.success(transactionStore.result.message, { position: 'top-right' })
     }
+    transactionStore.isShowEdit = false
 }
 
 const clickShowUpdateTransaction = id => {
@@ -34,7 +35,7 @@ const clickShowUpdateTransaction = id => {
                     :alt="props.transaction.categoryId.name">
             </div>
             <div class="w-full flex flex-col justify-between">
-                <div :class="props.transaction.type === 'incomes' ? 'text-green-500' : 'text-red-500'"
+                <div :class="props.transaction.categoryId.type === 1 ? 'text-green-500' : 'text-red-500'"
                     class="w-full flex gap-10 items-center">
                     <h3 class="w-full">{{ props.transaction.categoryId.name }}</h3>
                     <h4 class="w-full flex gap-1 items-center text-gray-600">
@@ -47,9 +48,7 @@ const clickShowUpdateTransaction = id => {
                 <div class="w-full flex gap-5 text-base">
                     <h4 class="w-[20%] flex gap-1 items-center">
                         <i class="fa-regular fa-money-bill-1"></i>
-                        {{ Number(props.transaction.amount).toLocaleString('de-DE', {
-                            style: 'currency', currency: 'VND'
-                        }) }}
+                        {{ Number(props.transaction.amount).toLocaleString('de-DE') + ' VNĐ' }}
                     </h4>
                     <h4 class="w-[80%]">
                         <span class="break-words">

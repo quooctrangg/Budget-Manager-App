@@ -10,4 +10,4 @@ Content-Type: application/json
 }
 
 ### Find all category
-GET {{urlDev}}/
+GET {{urlDev}}/?type=1
