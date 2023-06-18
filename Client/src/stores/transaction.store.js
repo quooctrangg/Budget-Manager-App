@@ -39,7 +39,7 @@ export const useTransactionStore = defineStore('transaction', () => {
 
     const filerByType = (value, type) => {
         return value.filter((item) => {
-            return item.type === type
+            return item.categoryId.type === type
         })
     }
 
@@ -50,8 +50,8 @@ export const useTransactionStore = defineStore('transaction', () => {
     }
 
     const totalBalance = (value) => {
-        let incomes = sumAmount(filerByType(value, 'incomes'))
-        let expenses = sumAmount(filerByType(value, 'expenses'))
+        let incomes = sumAmount(filerByType(value, 1))
+        let expenses = sumAmount(filerByType(value, -1))
         return incomes + expenses
     }
 

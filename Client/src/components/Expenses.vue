@@ -15,7 +15,7 @@ const transaction = ref(null)
 const sumAmount = ref(0)
 
 const getTransaction = async () => {
-    await transactionStore.findAllTransactionByUserId(userStore.user._id, { sort: -1, type: 'expenses' })
+    await transactionStore.findAllTransactionByUserId(userStore.user._id, { sort: -1, type: -1 })
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
         return
@@ -44,15 +44,13 @@ onMounted(() => {
         <div class="w-[100%] border-[3px] border-white rounded-xl bg-slate-100 text-center p-4">
             <h3 class="text-indigo-900">Tổng chi tiêu:
                 <span class="text-red-500 font-bold">
-                    {{ Number(sumAmount).toLocaleString('de-DE', {
-                        style: 'currency', currency: 'VND'
-                    }) }}
+                    {{ Number(sumAmount).toLocaleString('de-DE') + ' VNĐ' }}
                 </span>
             </h3>
         </div>
         <div class="w-full h-[100%] flex mt-5 gap-3">
             <div class="w-[30%] h-full">
-                <FormAdd :type="'expenses'" @submitEvent="getTransaction" />
+                <FormAdd :type="-1" @submitEvent="getTransaction" />
             </div>
             <div class="w-[70%] h-[80%] overflow-auto">
                 <Loading v-if="transactionStore.isLoading" />

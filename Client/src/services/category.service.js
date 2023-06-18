@@ -5,8 +5,8 @@ class categoryService {
         this.api = createService(baseUrl)
     }
 
-    async findAllCategorys() {
-        return (await this.api.get('/')).data
+    async findAllCategorys(type) {
+        return (await this.api.get(`/?type=${type}`)).data
     }
 }
 

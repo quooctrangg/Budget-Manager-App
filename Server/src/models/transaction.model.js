@@ -10,10 +10,6 @@ const TransactionSchema = new Schema({
         type: Number,
         require: true
     },
-    type: {
-        type: String,
-        require: true
-    },
     date: {
         type: Date,
         required: true,

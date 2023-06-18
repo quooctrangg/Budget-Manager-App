@@ -13,7 +13,7 @@ const createCategory = async (req, res, next) => {
 
 const findAllCategorys = async (req, res, next) => {
     try {
-        let message = await categoryService.findAllCategorys()
+        let message = await categoryService.findAllCategorys(req.query.type)
         return res.json(message)
     } catch (error) {
         return next(new ApiError(500, error.message))

@@ -6,15 +6,14 @@ Content-Type: application/json
 
 {
    "userId": "647dd504387505c72cfcace6",
-   "amount": "20000",
-   "type": "incomes",
-   "date": "05-08-2023",
-   "categoryId": "648540bc2ea2019e0e8d5d93",
+   "amount": "10000",
+   "date": "2023-06-17",
+   "categoryId": "64854ac42f10a8382e2be83b",
    "note": "hehehe"
 }
 
 ### Find all transactions by userId
-GET {{urlDev}}/user/647dd504387505c72cfcace6
+GET {{urlDev}}/user/647dd504387505c72cfcace6?type=1
 
 ### Find transaction by id
 GET {{urlDev}}/647e9355cabdea553b31fbe4

@@ -6,6 +6,7 @@ const findAllTransactionsByUserId = async (userId, select) => {
     const { date, type, categoryId, sort, startDate, endDate } = select
     let query = { userId: userId }
     let sortDate = {}
+    let selectType = {}
     if (date) {
         const start = new Date()
         const end = new Date()
@@ -32,10 +33,12 @@ const findAllTransactionsByUserId = async (userId, select) => {
                 break
         }
     }
-    if (type && type != 'all') query.type = type
+    if (type && type == -1 || type == 1) selectType.type = { $eq: type }
     if (categoryId && categoryId != 'all') query.categoryId = categoryId
     if (sort == 1 || sort == -1) sortDate.date = sort
-    return new ApiRes(200, 'success', 'Tìm thành công!', await transactionDB.find(query).sort(sortDate).populate('categoryId'))
+    let data = await transactionDB.find(query).sort(sortDate).populate({ path: 'categoryId', match: selectType })
+    data = data.filter(e => e.categoryId !== null);
+    return new ApiRes(200, 'success', 'Tìm thành công!', data)
 }
 
 const createTransaction = async data => {
@@ -63,54 +66,54 @@ const updateTransaction = async (id, newdata) => {
 }
 
 const statisticTransaction = async (userId, time) => {
-    const startDate = new Date()
-    const endDate = new Date()
-    let format = ''
-    switch (time) {
-        case '7days':
-            startDate.setDate(startDate.getDate() - 7)
-            format = '%d-%m-%Y'
-            break
-        case '6months':
-            startDate.setMonth(startDate.setMonth() - 6)
-            format = '%m-%Y'
-            break
-        case '5years':
-            startDate.setFullYear(startDate.setFullYear() - 5)
-            format = '%Y'
-            break
-        default:
-            return new ApiRes(400, 'failed', 'Yêu cầu không đúng!', null)
-    }
-    let chartLine = await transactionDB.aggregate([
-        { $match: { date: { $gte: startDate, $lte: endDate } } },
-        {
-            $group: {
-                _id: {
-                    userId: "$userId",
-                    date: { $dateToString: { format, date: "$date" } },
-                    type: "$type"
-                },
-                totalAmount: { $sum: "$amount" }
-            }
-        }
-    ])
-    let chartDoughnut = await transactionDB.aggregate([
-        { $match: { date: { $gte: startDate, $lte: endDate } } },
-        {
-            $group: {
-                _id: {
-                    userId: "$userId",
-                    categoryId: "$categoryId",
-                    type: "$type"
-                },
-                totalAmount: { $sum: "$amount" }
-            }
-        }
-    ])
-    chartLine = chartLine.filter(e => e._id.userId == userId)
-    chartDoughnut = chartDoughnut.filter(e => e._id.userId == userId)
-    return new ApiRes(200, 'success', 'Đã nhóm dữ liệu thành công!', { chartLine, chartDoughnut })
+    // const startDate = new Date()
+    // const endDate = new Date()
+    // let format = ''
+    // switch (time) {
+    //     case '7days':
+    //         startDate.setDate(startDate.getDate() - 7)
+    //         format = '%d-%m-%Y'
+    //         break
+    //     case '6months':
+    //         startDate.setMonth(startDate.setMonth() - 6)
+    //         format = '%m-%Y'
+    //         break
+    //     case '5years':
+    //         startDate.setFullYear(startDate.setFullYear() - 5)
+    //         format = '%Y'
+    //         break
+    //     default:
+    //         return new ApiRes(400, 'failed', 'Yêu cầu không đúng!', null)
+    // }
+    // let chartLine = await transactionDB.aggregate([
+    //     { $match: { date: { $gte: startDate, $lte: endDate } } },
+    //     {
+    //         $group: {
+    //             _id: {
+    //                 userId: "$userId",
+    //                 date: { $dateToString: { format, date: "$date" } },
+    //                 type: "$type"
+    //             },
+    //             totalAmount: { $sum: "$amount" }
+    //         }
+    //     }
+    // ])
+    // let chartDoughnut = await transactionDB.aggregate([
+    //     { $match: { date: { $gte: startDate, $lte: endDate } } },
+    //     {
+    //         $group: {
+    //             _id: {
+    //                 userId: "$userId",
+    //                 categoryId: "$categoryId",
+    //                 type: "$type"
+    //             },
+    //             totalAmount: { $sum: "$amount" }
+    //         }
+    //     }
+    // ])
+    // chartLine = chartLine.filter(e => e._id.userId == userId)
+    // chartDoughnut = chartDoughnut.filter(e => e._id.userId == userId)
+    // return new ApiRes(200, 'success', 'Đã nhóm dữ liệu thành công!', { chartLine, chartDoughnut })
 }
 
 module.exports = {
