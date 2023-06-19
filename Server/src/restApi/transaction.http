@@ -1,5 +1,8 @@
 @urlDev=http://localhost:8000/api/transaction/
 
+### Find all transactions by userId
+GET {{urlDev}}/?type=1
+
 ### Create transaction
 POST   {{urlDev}}/
 Content-Type: application/json
@@ -11,9 +14,6 @@ Content-Type: application/json
    "categoryId": "64854ac42f10a8382e2be83b",
    "note": "hehehe"
 }
-
-### Find all transactions by userId
-GET {{urlDev}}/user/647dd504387505c72cfcace6?type=1
 
 ### Find transaction by id
 GET {{urlDev}}/647e9355cabdea553b31fbe4
@@ -32,7 +32,10 @@ Content-Type: application/json
    "note": "Ăn hải sản,..."
 }
 
-### Statistic transaction
-GET {{urlDev}}/statistic/647dd504387505c72cfcace6-7days
+### Chart line
+GET {{urlDev}}/chartline?type=week&startdate=2023-06-12&enddate=2023-06-18
+
+### Chart doughnut
+GET {{urlDev}}/chartdoughnut?startdate=2023-06-12&enddate=2023-06-18
 
 
