@@ -1,7 +1,6 @@
 <script setup>
 import { ref, reactive, watch, computed, onMounted } from 'vue'
 import { useTransactionStore } from '../stores/transaction.store'
-import { useUserStore } from '../stores/user.store'
 import { Line } from 'vue-chartjs'
 import { useToast } from 'vue-toast-notification'
 import { Chart as ChartJs, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement } from 'chart.js/auto'
@@ -9,11 +8,9 @@ import moment from 'moment'
 import Loading from '../components/Loading.vue'
 
 const transactionStore = useTransactionStore()
-const userStore = useUserStore()
 const $toast = useToast()
 
 const props = defineProps(['data'])
-const emits = defineEmits(['datatotal'])
 
 ChartJs.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement)
 
@@ -43,80 +40,75 @@ const dataLine = reactive({
     }
 })
 
-const setDateLine = time => {
-    const currentDate = new Date();
-    let dataArray = []
-    switch (time) {
-        case '7days':
-            for (let i = 6; i >= 0; i--) {
-                const day = new Date();
-                day.setDate(currentDate.getDate() - i);
-                dataArray.push(moment(day).format('DD-MM-YYYY'));
+const setDateLine = select => {
+    let currentDate = moment(select.startdate)
+    let endDate = moment(select.enddate)
+    dataLine.labels = []
+    switch (select.type) {
+        case 'week':
+            while (currentDate <= endDate) {
+                dataLine.labels.push(currentDate.format('DD-MM-YYYY'))
+                currentDate = moment(currentDate).add(1, 'day')
             }
             break
-        case '6months':
-            for (let i = 5; i >= 0; i--) {
-                const month = new Date();
-                month.setMonth(currentDate.getMonth() - i);
-                dataArray.push(moment(month).format('MM-YYYY'));
+        case 'month':
+            while (currentDate <= endDate) {
+                dataLine.labels.push(currentDate.format('DD-MM-YYYY'))
+                currentDate = moment(currentDate).add(1, 'day')
             }
             break
-        case '5years':
-            for (let i = 4; i >= 0; i--) {
-                const year = new Date();
-                year.setFullYear(currentDate.getFullYear() - i);
-                dataArray.push(moment(year).format('YYYY'));
+        case 'year':
+            currentDate = moment(select.startdate)
+            endDate = moment(select.enddate)
+            while (currentDate <= endDate) {
+                dataLine.labels.push(currentDate.format('MM-YYYY'))
+                currentDate = moment(currentDate).add(1, 'month')
             }
             break
     }
-    return dataArray
 }
 
-const getStatistic = async (time) => {
-    await transactionStore.statisticTransaction(userStore.user._id, time)
+const getDataLine = async select => {
+    await transactionStore.chartLineTransaction(select)
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
         return
     }
-    return transactionStore.result.data.chartLine
 }
 
-const setDataLine = (dateArray, dataArray) => {
-    dataLine.labels = []
+const setDataLine = dataArray => {
     dataLine.datasets[0].data = []
     dataLine.datasets[1].data = []
-    dateArray.map(e => {
-        dataLine.labels.push(e)
-    })
-    dateArray.forEach((date, index) => {
+    dataLine.labels.forEach((date, index) => {
         dataArray.forEach(e => {
-            if (e._id.date == date && e._id.type == 'incomes') {
+            if (e._id.date == date && e._id.type == 1) {
                 dataLine.datasets[0].data.push(e.totalAmount)
             }
-            if (e._id.date == date && e._id.type == 'expenses') {
+            if (e._id.date == date && e._id.type == -1) {
                 dataLine.datasets[1].data.push(e.totalAmount * -1)
             }
         })
         if (!dataLine.datasets[0].data[index]) dataLine.datasets[0].data.push(0)
         if (!dataLine.datasets[1].data[index]) dataLine.datasets[1].data.push(0)
     })
-    emits('datatotal', transactionStore.result.data.chartLine)
 }
 
 const chartData = computed(() => { return { ...dataLine } })
 
-const getChart = async (value) => {
-    isLoading.value = true
-    setDataLine(setDateLine(value), await getStatistic(value))
-    isLoading.value = false
-}
-
 watch(() => props.data, async (newValue) => {
-    await getChart(newValue)
+    isLoading.value = true
+    await getDataLine(props.data)
+    setDateLine(props.data)
+    setDataLine(transactionStore.result.data)
+    isLoading.value = false
 })
 
 onMounted(async () => {
-    await getChart(props.data)
+    isLoading.value = true
+    await getDataLine(props.data)
+    setDateLine(props.data)
+    setDataLine(transactionStore.result.data)
+    isLoading.value = false
 })
 </script>
 <template>

@@ -25,8 +25,12 @@ class transactionService {
         return (await this.api.get(`/?${select}`)).data
     }
 
-    async statisticTransaction(userId, time) {
-        return (await this.api.get(`/statistic/${userId}-${time}`)).data
+    async chartLineTransaction(select) {
+        return (await this.api.get(`/chartline/?${select}`)).data
+    }
+
+    async chartDoughnutTransaction(select) {
+        return (await this.api.get(`/chartdoughnut/?${select}`)).data
     }
 }
 

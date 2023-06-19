@@ -84,18 +84,12 @@ const chartIncomes = computed(() => { return { ...dataDoughnutIncomes } })
 
 const chartExpenses = computed(() => { return { ...dataDoughnutExpenses } })
 
-const getDoughnut = async (value) => {
-    isLoading.value = true
-    setDataDoughnut(await setCategorysDoughnut(), await getStatistic(value))
-    isLoading.value = false
-}
-
 watch(() => props.data, async (newValue) => {
-    await getDoughnut(newValue)
+
 })
 
 onMounted(async () => {
-    await getDoughnut(props.data)
+
 })
 </script>
 <template>

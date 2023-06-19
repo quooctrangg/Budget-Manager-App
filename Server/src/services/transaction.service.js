@@ -73,13 +73,13 @@ const chartLine = async (userId, select) => {
     let end = new Date(enddate)
     switch (type) {
         case 'week':
-            format = '%Y-%m-%d'
+            format = '%d-%m-%Y'
             break
         case 'month':
-            format = '%Y-%m-%d'
+            format = '%d-%m-%Y'
             break
         case 'year':
-            format = '%Y-%m'
+            format = '%m-%Y'
             break
         default:
             return new ApiRes(400, 'failed', 'Yêu cầu không đúng!', null)
