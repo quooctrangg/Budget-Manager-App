@@ -70,7 +70,7 @@ export const useTransactionStore = defineStore('transaction', () => {
         }
     }
 
-    const findAllTransactionByUserId = async (userId, select) => {
+    const findAllTransactionByUserId = async (select) => {
         err.value = null
         result.value = null
         isLoading.value = true
@@ -78,7 +78,7 @@ export const useTransactionStore = defineStore('transaction', () => {
             let queryString = Object.keys(select)
                 .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(select[key]))
                 .join("&");
-            let res = await transactionService.findTransactionByUserId(userId, queryString)
+            let res = await transactionService.findTransactionByUserId(queryString)
             if (res.code !== 200) throw new Error(res.message)
             result.value = res
         } catch (error) {
