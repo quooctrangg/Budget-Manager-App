@@ -1,6 +1,7 @@
 const transactionDB = require('../models/transaction.model')
 const ApiRes = require('../utils/api-res')
 const monent = require('moment')
+const mongoose = require('mongoose')
 
 const findAllTransactionsByUserId = async (userId, select) => {
     const { date, type, categoryId, sort, startDate, endDate } = select
@@ -65,55 +66,88 @@ const updateTransaction = async (id, newdata) => {
     return new ApiRes(200, 'success', 'Cập nhật giao dịch thành công!', data)
 }
 
-const statisticTransaction = async (userId, time) => {
-    // const startDate = new Date()
-    // const endDate = new Date()
-    // let format = ''
-    // switch (time) {
-    //     case '7days':
-    //         startDate.setDate(startDate.getDate() - 7)
-    //         format = '%d-%m-%Y'
-    //         break
-    //     case '6months':
-    //         startDate.setMonth(startDate.setMonth() - 6)
-    //         format = '%m-%Y'
-    //         break
-    //     case '5years':
-    //         startDate.setFullYear(startDate.setFullYear() - 5)
-    //         format = '%Y'
-    //         break
-    //     default:
-    //         return new ApiRes(400, 'failed', 'Yêu cầu không đúng!', null)
-    // }
-    // let chartLine = await transactionDB.aggregate([
-    //     { $match: { date: { $gte: startDate, $lte: endDate } } },
-    //     {
-    //         $group: {
-    //             _id: {
-    //                 userId: "$userId",
-    //                 date: { $dateToString: { format, date: "$date" } },
-    //                 type: "$type"
-    //             },
-    //             totalAmount: { $sum: "$amount" }
-    //         }
-    //     }
-    // ])
-    // let chartDoughnut = await transactionDB.aggregate([
-    //     { $match: { date: { $gte: startDate, $lte: endDate } } },
-    //     {
-    //         $group: {
-    //             _id: {
-    //                 userId: "$userId",
-    //                 categoryId: "$categoryId",
-    //                 type: "$type"
-    //             },
-    //             totalAmount: { $sum: "$amount" }
-    //         }
-    //     }
-    // ])
-    // chartLine = chartLine.filter(e => e._id.userId == userId)
-    // chartDoughnut = chartDoughnut.filter(e => e._id.userId == userId)
-    // return new ApiRes(200, 'success', 'Đã nhóm dữ liệu thành công!', { chartLine, chartDoughnut })
+const chartLine = async (userId, select) => {
+    const { type, startdate, enddate } = select
+    let format = ''
+    let start = new Date(startdate)
+    let end = new Date(enddate)
+    switch (type) {
+        case 'week':
+            format = '%d-%m-%Y'
+            break
+        case 'month':
+            format = '%d-%m-%Y'
+            break
+        case 'year':
+            format = '%m-%Y'
+            break
+        default:
+            return new ApiRes(400, 'failed', 'Yêu cầu không đúng!', null)
+    }
+    let data = await transactionDB.aggregate([
+        {
+            $match: {
+                date: { $gte: start, $lte: end },
+                userId: new mongoose.Types.ObjectId(userId)
+            }
+        },
+        {
+            $lookup: {
+                from: "categories",
+                localField: "categoryId",
+                foreignField: "_id",
+                as: "category"
+            }
+        },
+        {
+            $unwind: "$category"
+        },
+        {
+            $group: {
+                _id: {
+                    date: { $dateToString: { format, date: "$date" } },
+                    type: "$category.type",
+                },
+                totalAmount: { $sum: "$amount" }
+            }
+        }
+    ])
+    return new ApiRes(200, 'success', 'Đã nhóm dữ liệu thành công!', data)
+}
+
+const chartDoughnut = async (userId, select) => {
+    const { startdate, enddate } = select
+    let start = new Date(startdate)
+    let end = new Date(enddate)
+    let data = await transactionDB.aggregate([
+        {
+            $match: {
+                date: { $gte: start, $lte: end },
+                userId: new mongoose.Types.ObjectId(userId)
+            }
+        },
+        {
+            $lookup: {
+                from: "categories",
+                localField: "categoryId",
+                foreignField: "_id",
+                as: "category"
+            }
+        },
+        {
+            $unwind: "$category"
+        },
+        {
+            $group: {
+                _id: {
+                    name: "$category.name",
+                    type: "$category.type",
+                },
+                totalAmount: { $sum: "$amount" }
+            }
+        }
+    ])
+    return new ApiRes(200, 'success', 'Đã nhóm dữ liệu thành công!', data)
 }
 
 module.exports = {
@@ -122,5 +156,6 @@ module.exports = {
     findByIdTransaction,
     deleteTransaction,
     updateTransaction,
-    statisticTransaction
+    chartLine,
+    chartDoughnut
 }

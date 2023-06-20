@@ -4,13 +4,14 @@ const router = express.Router()
 const middlewares = require('../middlewares/auth.middlewares')
 
 router.route('/')
+    .get(middlewares.checkLogin, transaction.findAllTransactionsByUserId)
     .post(middlewares.checkLogin, transaction.createTransaction)
 
-router.route('/user/:userId')
-    .get(middlewares.checkLogin, transaction.findAllTransactionsByUserId)
+router.route('/chartline')
+    .get(middlewares.checkLogin, transaction.chartLine)
 
-router.route('/statistic/:userId-:time')
-    .get(middlewares.checkLogin, transaction.statisticTransaction)
+router.route('/chartdoughnut')
+    .get(middlewares.checkLogin, transaction.chartDoughnut)
 
 router.route('/:id')
     .get(middlewares.checkLogin, transaction.findByIdTransaction)

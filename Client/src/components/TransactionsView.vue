@@ -1,14 +1,12 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { useTransactionStore } from '../stores/transaction.store'
-import { useUserStore } from '../stores/user.store'
 import { useToast } from 'vue-toast-notification'
 import { useCategoryStore } from '../stores/category.store'
 import Loading from './Loading.vue'
 import Card from '../components/Card.vue'
 
 const transactionStore = useTransactionStore()
-const userStore = useUserStore()
 const categoryStore = useCategoryStore()
 const $toast = useToast();
 
@@ -28,7 +26,7 @@ const totalBalance = ref(0)
 
 const getTransaction = async () => {
     transaction.value = null
-    await transactionStore.findAllTransactionByUserId(userStore.user._id, select.value)
+    await transactionStore.findAllTransactionByUserId(select.value)
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
         return

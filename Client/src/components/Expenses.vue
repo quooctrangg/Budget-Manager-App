@@ -2,20 +2,18 @@
 import { onMounted, ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import { useTransactionStore } from '../stores/transaction.store'
-import { useUserStore } from '../stores/user.store'
 import Loading from './Loading.vue'
 import FormAdd from '../components/FormAdd.vue'
 import Card from '../components/Card.vue'
 
 const transactionStore = useTransactionStore()
-const userStore = useUserStore()
 const $toast = useToast();
 
 const transaction = ref(null)
 const sumAmount = ref(0)
 
 const getTransaction = async () => {
-    await transactionStore.findAllTransactionByUserId(userStore.user._id, { sort: -1, type: -1 })
+    await transactionStore.findAllTransactionByUserId({ sort: -1, type: -1 })
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
         return

@@ -49,7 +49,7 @@ export const useTransactionStore = defineStore('transaction', () => {
         }, 0)
     }
 
-    const totalBalance = (value) => {
+    const totalBalance = value => {
         let incomes = sumAmount(filerByType(value, 1))
         let expenses = sumAmount(filerByType(value, -1))
         return incomes + expenses
@@ -70,7 +70,7 @@ export const useTransactionStore = defineStore('transaction', () => {
         }
     }
 
-    const findAllTransactionByUserId = async (userId, select) => {
+    const findAllTransactionByUserId = async select => {
         err.value = null
         result.value = null
         isLoading.value = true
@@ -78,7 +78,7 @@ export const useTransactionStore = defineStore('transaction', () => {
             let queryString = Object.keys(select)
                 .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(select[key]))
                 .join("&");
-            let res = await transactionService.findTransactionByUserId(userId, queryString)
+            let res = await transactionService.findTransactionByUserId(queryString)
             if (res.code !== 200) throw new Error(res.message)
             result.value = res
         } catch (error) {
@@ -133,12 +133,33 @@ export const useTransactionStore = defineStore('transaction', () => {
         }
     }
 
-    const statisticTransaction = async (userId, time) => {
+    const chartLineTransaction = async select => {
         err.value = null
         result.value = null
         isLoading.value = true
         try {
-            let res = await transactionService.statisticTransaction(userId, time)
+            let queryString = Object.keys(select)
+                .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(select[key]))
+                .join("&");
+            let res = await transactionService.chartLineTransaction(queryString)
+            if (res.code !== 200) throw new Error(res.message)
+            result.value = res
+        } catch (error) {
+            err.value = error.message
+        } finally {
+            isLoading.value = false
+        }
+    }
+
+    const chartDoughnutTransaction = async select => {
+        err.value = null
+        result.value = null
+        isLoading.value = true
+        try {
+            let queryString = Object.keys(select)
+                .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(select[key]))
+                .join("&");
+            let res = await transactionService.chartDoughnutTransaction(queryString)
             if (res.code !== 200) throw new Error(res.message)
             result.value = res
         } catch (error) {
@@ -151,6 +172,6 @@ export const useTransactionStore = defineStore('transaction', () => {
     return {
         err, result, isShowEdit, data, idTransaction, isLoading, setData, resetData, sumAmount, filerByType, totalBalance,
         createTransaction, findAllTransactionByUserId, deleteTransaction, findTransactionById,
-        updateTransaction, statisticTransaction
+        updateTransaction, chartLineTransaction, chartDoughnutTransaction
     }
 })

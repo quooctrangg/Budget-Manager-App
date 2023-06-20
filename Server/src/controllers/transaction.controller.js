@@ -2,9 +2,8 @@ const transactionService = require('../services/transaction.service')
 const ApiError = require('../utils/api-error')
 
 const findAllTransactionsByUserId = async (req, res, next) => {
-    if (!req.params) return next(new ApiError(400, 'Thiếu tham số bắt buộc!'))
     try {
-        let message = await transactionService.findAllTransactionsByUserId(req.params.userId, req.query)
+        let message = await transactionService.findAllTransactionsByUserId(req.id, req.query)
         return res.json(message)
     } catch (error) {
         return next(new ApiError(500, error.message))
@@ -51,10 +50,18 @@ const updateTransaction = async (req, res, next) => {
     }
 }
 
-const statisticTransaction = async (req, res, next) => {
-    if (!req.params.userId || !req.params.time) return next(new ApiError(400, 'Thiếu tham số bắt buộc!'))
+const chartLine = async (req, res, next) => {
     try {
-        let message = await transactionService.statisticTransaction(req.params.userId, req.params.time)
+        let message = await transactionService.chartLine(req.id, req.query)
+        return res.json(message)
+    } catch (error) {
+        return next(new ApiError(500, error.message))
+    }
+}
+
+const chartDoughnut = async (req, res, next) => {
+    try {
+        let message = await transactionService.chartDoughnut(req.id, req.query)
         return res.json(message)
     } catch (error) {
         return next(new ApiError(500, error.message))
@@ -67,5 +74,6 @@ module.exports = {
     findByIdTransaction,
     deleteTransaction,
     updateTransaction,
-    statisticTransaction
+    chartLine,
+    chartDoughnut
 }
