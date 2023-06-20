@@ -10,6 +10,7 @@ const transactionStore = useTransactionStore()
 const $toast = useToast()
 
 const props = defineProps(['data'])
+const emits = defineEmits(['datatotal'])
 
 ChartJs.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement)
 
@@ -67,13 +68,19 @@ const chartIncomes = computed(() => { return { ...dataDoughnutIncomes } })
 const chartExpenses = computed(() => { return { ...dataDoughnutExpenses } })
 
 watch(() => props.data, async (newValue) => {
+    isLoading.value = true
     await getDataDoughnut(props.data)
     setDataDoughnut(transactionStore.result.data)
+    emits('datatotal', transactionStore.result.data)
+    isLoading.value = false
 })
 
 onMounted(async () => {
+    isLoading.value = true
     await getDataDoughnut(props.data)
     setDataDoughnut(transactionStore.result.data)
+    emits('datatotal', transactionStore.result.data)
+    isLoading.value = false
 })
 </script>
 <template>

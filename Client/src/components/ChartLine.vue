@@ -11,6 +11,7 @@ const transactionStore = useTransactionStore()
 const $toast = useToast()
 
 const props = defineProps(['data'])
+const emits = defineEmits(['datatotal'])
 
 ChartJs.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement)
 
@@ -100,6 +101,7 @@ watch(() => props.data, async (newValue) => {
     await getDataLine(props.data)
     setDateLine(props.data)
     setDataLine(transactionStore.result.data)
+    emits('datatotal', transactionStore.result.data)
     isLoading.value = false
 })
 
@@ -108,6 +110,7 @@ onMounted(async () => {
     await getDataLine(props.data)
     setDateLine(props.data)
     setDataLine(transactionStore.result.data)
+    emits('datatotal', transactionStore.result.data)
     isLoading.value = false
 })
 </script>

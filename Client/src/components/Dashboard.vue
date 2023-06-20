@@ -76,6 +76,21 @@ const handleBack = () => {
     }
 }
 
+const totalTransaction = (data) => {
+    totalIncomes.value = 0
+    totalExpenses.value = 0
+    totalBalance.value = 0
+    data.forEach(element => {
+        if (element._id.type == 1) {
+            totalIncomes.value += element.totalAmount
+        }
+        if (element._id.type == -1) {
+            totalExpenses.value += element.totalAmount
+        }
+    });
+    totalBalance.value = totalIncomes.value + totalExpenses.value
+}
+
 const selectType = computed(() => { return { ...select } })
 
 watch(() => select.type, () => {
@@ -166,7 +181,7 @@ watch(() => select.type, () => {
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
-                <ChartLine :data="selectType" />
+                <ChartLine :data="selectType" @datatotal="(data) => totalTransaction(data)" />
             </div>
             <div v-else class="h-[100%] flex flex-col">
                 <div class="flex justify-between items-center">
@@ -181,7 +196,7 @@ watch(() => select.type, () => {
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
-                <ChartDoughnut :data="selectType" class="flex-1" />
+                <ChartDoughnut :data="selectType" class="flex-1" @datatotal="(data) => totalTransaction(data)" />
             </div>
         </div>
     </div>
