@@ -13,20 +13,24 @@ const chart = ref('line')
 const totalIncomes = ref(0)
 const totalExpenses = ref(0)
 const totalBalance = ref(0)
+const noteDate = ref(moment(select.startdate).format('DD/MM/YYYY') + ' - ' + moment(select.enddate).format('DD/MM/YYYY'))
 
 const handleSetDate = type => {
     switch (type) {
         case 'week':
             select.startdate = moment().startOf('week').add(1, 'day').format('YYYY-MM-DD')
             select.enddate = moment().endOf('week').add(1, 'day').format('YYYY-MM-DD')
+            noteDate.value = moment(select.startdate).format('DD/MM/YYYY') + ' - ' + moment(select.enddate).format('DD/MM/YYYY')
             break
         case 'month':
             select.startdate = moment().startOf('month').format('YYYY-MM-DD')
             select.enddate = moment().endOf('month').format('YYYY-MM-DD')
+            noteDate.value = 'Tháng ' + moment(select.startdate).format('MM-YYYY')
             break
         case 'year':
             select.startdate = moment().startOf('year').format('YYYY-MM-DD')
             select.enddate = moment().endOf('year').format('YYYY-MM-DD')
+            noteDate.value = 'Năm ' + moment(select.startdate).format('YYYY')
             break
     }
 }
@@ -37,14 +41,17 @@ const handleNext = () => {
         case 'week':
             select.startdate = moment(select.startdate).add(1, 'week').format('YYYY-MM-DD')
             select.enddate = moment(select.enddate).add(1, 'week').format('YYYY-MM-DD')
+            noteDate.value = moment(select.startdate).format('DD/MM/YYYY') + ' - ' + moment(select.enddate).format('DD/MM/YYYY')
             break
         case 'month':
             select.startdate = moment(select.startdate).add(1, 'month').startOf('month').format('YYYY-MM-DD')
             select.enddate = moment(select.enddate).add(1, 'month').endOf('month').format('YYYY-MM-DD')
+            noteDate.value = 'Tháng ' + moment(select.startdate).format('MM-YYYY')
             break
         case 'year':
             select.startdate = moment(select.startdate).add(1, 'year').format('YYYY-MM-DD')
             select.enddate = moment(select.enddate).add(1, 'year').format('YYYY-MM-DD')
+            noteDate.value = 'Năm ' + moment(select.startdate).format('YYYY')
             break
     }
 }
@@ -54,14 +61,17 @@ const handleBack = () => {
         case 'week':
             select.startdate = moment(select.startdate).subtract(1, 'week').format('YYYY-MM-DD')
             select.enddate = moment(select.enddate).subtract(1, 'week').format('YYYY-MM-DD')
+            noteDate.value = moment(select.startdate).format('DD/MM/YYYY') + ' - ' + moment(select.enddate).format('DD/MM/YYYY')
             break
         case 'month':
             select.startdate = moment(select.startdate).subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
             select.enddate = moment(select.enddate).subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
+            noteDate.value = 'Tháng ' + moment(select.startdate).format('MM-YYYY')
             break
         case 'year':
             select.startdate = moment(select.startdate).subtract(1, 'year').format('YYYY-MM-DD')
             select.enddate = moment(select.enddate).subtract(1, 'year').format('YYYY-MM-DD')
+            noteDate.value = 'Năm ' + moment(select.startdate).format('YYYY')
             break
     }
 }
@@ -148,7 +158,10 @@ watch(() => select.type, () => {
                     <button class="px-2 text-2xl text-red-500 hover:text-red-300" @click="handleBack">
                         <i class="fa-solid fa-chevron-left"></i>
                     </button>
-                    <h1 class="text-2xl font-bold text-indigo-900 mb-2">Thu nhập và chi tiêu</h1>
+                    <div class="flex flex-col justify-center items-center">
+                        <h1 class="text-2xl font-bold text-indigo-900">Thu nhập và chi tiêu </h1>
+                        <span class="text-xs text-red-500">{{ noteDate }}</span>
+                    </div>
                     <button class="px-2 text-2xl text-red-500 hover:text-red-300" @click="handleNext">
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
@@ -160,12 +173,15 @@ watch(() => select.type, () => {
                     <button class="px-2 text-2xl text-red-500 hover:text-red-300" @click="handleBack">
                         <i class="fa-solid fa-chevron-left"></i>
                     </button>
-                    <h1 class="text-2xl font-bold text-indigo-900 mb-2">Chi phí theo danh mục</h1>
+                    <div class="flex flex-col justify-center items-center">
+                        <h1 class="text-2xl font-bold text-indigo-900">Chi phí theo danh mục</h1>
+                        <span class="text-xs text-red-500">{{ noteDate }}</span>
+                    </div>
                     <button class="px-2 text-2xl text-red-500 hover:text-red-300" @click="handleNext">
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
-                <ChartDoughnut :data="select" class="flex-1" />
+                <ChartDoughnut :data="selectType" class="flex-1" />
             </div>
         </div>
     </div>
