@@ -29,7 +29,7 @@ const clickShowUpdateTransaction = id => {
 <template>
     <div
         class="rounded-md border-[2px] border-white bg-slate-100 bg-opacity-50 w-full p-1 focus:border-green-500 flex justify-between items-center mb-2">
-        <div class="flex w-full gap-2">
+        <div class="flex w-full gap-2 items-center">
             <div class="w-[10%]">
                 <img :src="`http://localhost:8000/public/` + props.transaction.categoryId.image"
                     :alt="props.transaction.categoryId.name">
@@ -45,11 +45,11 @@ const clickShowUpdateTransaction = id => {
                         </span>
                     </h4>
                 </div>
-                <div class="w-full flex gap-5 text-base">
-                    <h4 class="w-[20%] flex gap-1 items-center">
+                <div class="w-full flex gap-5 text-sm">
+                    <h4 class="w-auto flex gap-1 items-center">
                         {{ Number(props.transaction.amount).toLocaleString('de-DE') + ' VNĐ' }}
                     </h4>
-                    <h4 class="w-[80%]">
+                    <h4 class="flex-1">
                         <span class="break-words">
                             <i class="fa-solid fa-message"></i>
                             {{ props.transaction.note }}

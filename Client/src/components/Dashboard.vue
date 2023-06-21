@@ -25,7 +25,7 @@ const handleSetDate = type => {
         case 'month':
             select.startdate = moment().startOf('month').format('YYYY-MM-DD')
             select.enddate = moment().endOf('month').format('YYYY-MM-DD')
-            noteDate.value = 'Tháng ' + moment(select.startdate).format('MM-YYYY')
+            noteDate.value = 'Tháng ' + moment(select.startdate).format('MM/YYYY')
             break
         case 'year':
             select.startdate = moment().startOf('year').format('YYYY-MM-DD')
@@ -46,7 +46,7 @@ const handleNext = () => {
         case 'month':
             select.startdate = moment(select.startdate).add(1, 'month').startOf('month').format('YYYY-MM-DD')
             select.enddate = moment(select.enddate).add(1, 'month').endOf('month').format('YYYY-MM-DD')
-            noteDate.value = 'Tháng ' + moment(select.startdate).format('MM-YYYY')
+            noteDate.value = 'Tháng ' + moment(select.startdate).format('MM/YYYY')
             break
         case 'year':
             select.startdate = moment(select.startdate).add(1, 'year').format('YYYY-MM-DD')
@@ -66,7 +66,7 @@ const handleBack = () => {
         case 'month':
             select.startdate = moment(select.startdate).subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
             select.enddate = moment(select.enddate).subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
-            noteDate.value = 'Tháng ' + moment(select.startdate).format('MM-YYYY')
+            noteDate.value = 'Tháng ' + moment(select.startdate).format('MM/YYYY')
             break
         case 'year':
             select.startdate = moment(select.startdate).subtract(1, 'year').format('YYYY-MM-DD')
@@ -101,40 +101,40 @@ watch(() => select.type, () => {
     <div class="flex flex-col gap-2">
         <div class="flex gap-5 justify-between">
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
-                <div class="text-green-500 bg-white h-full w-[30%] flex justify-center items-center text-3xl">
-                    <i class="fa-regular fa-money-bill-1"></i>
+                <div class="bg-white h-full w-[30%] flex justify-center items-center text-3xl">
+                    <i class="fa-regular fa-money-bill-1 text-green-500"></i>
                 </div>
                 <div class="h-full p-2">
                     <h3 class="font-semibold text-base text-gray-600">Tổng thu nhập</h3>
                     <span class="text-gray-500">
                         {{
-                            Number(totalIncomes).toLocaleString('de-DE', { style: 'currency', currency: 'VND' })
+                            Number(totalIncomes).toLocaleString('de-DE') + ' VNĐ'
                         }}
                     </span>
                 </div>
             </div>
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
-                <div class="text-green-500 bg-white h-full w-[30%] flex justify-center items-center text-3xl">
+                <div class="bg-white h-full w-[30%] flex justify-center items-center text-3xl">
                     <i class="fa-regular fa-money-bill-1 text-red-500"></i>
                 </div>
                 <div class="p-2">
                     <h3 class="font-semibold text-base text-gray-600 ">Tổng chi tiêu</h3>
                     <span class="text-gray-500">
                         {{
-                            Number(totalExpenses).toLocaleString('de-DE', { style: 'currency', currency: 'VND' })
+                            Number(totalExpenses).toLocaleString('de-DE') + ' VNĐ'
                         }}
                     </span>
                 </div>
             </div>
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
-                <div class="text-green-500 bg-white h-full w-[30%] flex justify-center items-center text-3xl">
-                    <i class="fa-regular fa-money-bill-1 text-lime-500"></i>
+                <div class="bg-white h-full w-[30%] flex justify-center items-center text-3xl">
+                    <i class="fa-regular fa-money-bill-1 text-blue-500"></i>
                 </div>
                 <div class="p-2">
                     <h3 class="font-semibold text-base text-gray-600 ">Tổng số dư</h3>
                     <span class="text-gray-500">
                         {{
-                            Number(totalBalance).toLocaleString('de-DE', { style: 'currency', currency: 'VND' })
+                            Number(totalBalance).toLocaleString('de-DE') + ' VNĐ'
                         }}
                     </span>
                 </div>
@@ -155,14 +155,14 @@ watch(() => select.type, () => {
                     <input type="radio" id="line" value="line" v-model="chart"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" />
                     <label for="line" class="ml-2 text-base font-medium text-gray-900">
-                        Biểu đồ Đường
+                        Thống kê "Thu nhập và chi tiêu"
                     </label>
                 </div>
                 <div class="flex gap-1 items-center">
                     <input type="radio" id="doughnut" value="doughnut" v-model="chart"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" />
                     <label for="doughnut" class="ml-2 text-base font-medium text-gray-900">
-                        Biểu đồ Tròn
+                        Thống kê "Chi phí theo danh mục"
                     </label>
                 </div>
             </div>

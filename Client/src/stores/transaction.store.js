@@ -1,14 +1,19 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import moment from 'moment'
+import { useToast } from 'vue-toast-notification'
 
 import transactionService from '../services/transaction.service'
 
 export const useTransactionStore = defineStore('transaction', () => {
+    const $toast = useToast()
+
     const err = ref(null)
     const result = ref(null)
     const isShowEdit = ref(false)
     const isLoading = ref(false)
+    const warningTotal = ref(false)
+    const total = ref(0)
     const data = ref({
         userId: '',
         amount: '',
@@ -169,8 +174,32 @@ export const useTransactionStore = defineStore('transaction', () => {
         }
     }
 
+    const getTotal = async () => {
+        try {
+            let res = await transactionService.getTotal()
+            total.value = res.data[0]?.totalAmount || 0
+            if (res.data[0]?.count != 0) {
+                if (res.data[0]?.totalAmount < 200000) {
+                    warningTotal.value = true
+                } else {
+                    warningTotal.value = false
+                }
+            } else {
+                warningTotal.value = false
+            }
+        } catch (error) {
+            err.value = error.message
+        }
+    }
+
+    watch(() => isLoading.value, (newdata) => {
+        if (newdata) {
+            getTotal()
+        }
+    })
+
     return {
-        err, result, isShowEdit, data, idTransaction, isLoading, setData, resetData, sumAmount, filerByType, totalBalance,
+        err, result, isShowEdit, data, idTransaction, isLoading, warningTotal, total, setData, resetData, sumAmount, filerByType, totalBalance,
         createTransaction, findAllTransactionByUserId, deleteTransaction, findTransactionById,
         updateTransaction, chartLineTransaction, chartDoughnutTransaction
     }

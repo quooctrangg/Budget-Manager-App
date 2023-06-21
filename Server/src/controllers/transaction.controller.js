@@ -68,6 +68,15 @@ const chartDoughnut = async (req, res, next) => {
     }
 }
 
+const sumTotal = async (req, res, next) => {
+    try {
+        let message = await transactionService.sumTotal(req.id)
+        return res.json(message)
+    } catch (error) {
+        return next(new ApiError(500, error.message))
+    }
+}
+
 module.exports = {
     findAllTransactionsByUserId,
     createTransaction,
@@ -75,5 +84,6 @@ module.exports = {
     deleteTransaction,
     updateTransaction,
     chartLine,
-    chartDoughnut
+    chartDoughnut,
+    sumTotal
 }

@@ -38,4 +38,7 @@ GET {{urlDev}}/chartline?type=week&startdate=2023-06-12&enddate=2023-06-18
 ### Chart doughnut
 GET {{urlDev}}/chartdoughnut?startdate=2023-06-12&enddate=2023-06-18
 
+### Sum total
+GET {{urlDev}}/sumtotal
+
 

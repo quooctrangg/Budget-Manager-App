@@ -150,6 +150,24 @@ const chartDoughnut = async (userId, select) => {
     return new ApiRes(200, 'success', 'Đã nhóm dữ liệu thành công!', data)
 }
 
+const sumTotal = async (userId) => {
+    let data = await transactionDB.aggregate([
+        {
+            $match: {
+                userId: new mongoose.Types.ObjectId(userId)
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                totalAmount: { $sum: "$amount" },
+                count: { $sum: 1 }
+            }
+        }
+    ])
+    return new ApiRes(200, 'success', 'Tính tổng thành công!', data)
+}
+
 module.exports = {
     findAllTransactionsByUserId,
     createTransaction,
@@ -157,5 +175,6 @@ module.exports = {
     deleteTransaction,
     updateTransaction,
     chartLine,
-    chartDoughnut
+    chartDoughnut,
+    sumTotal
 }
