@@ -32,6 +32,10 @@ class transactionService {
     async chartDoughnutTransaction(select) {
         return (await this.api.get(`/chartdoughnut/?${select}`)).data
     }
+
+    async getTotal() {
+        return (await this.api.get('/sumtotal')).data
+    }
 }
 
 export default new transactionService()

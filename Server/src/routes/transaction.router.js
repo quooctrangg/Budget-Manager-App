@@ -13,6 +13,9 @@ router.route('/chartline')
 router.route('/chartdoughnut')
     .get(middlewares.checkLogin, transaction.chartDoughnut)
 
+router.route('/sumtotal')
+    .get(middlewares.checkLogin, transaction.sumTotal)
+
 router.route('/:id')
     .get(middlewares.checkLogin, transaction.findByIdTransaction)
     .put(middlewares.checkLogin, transaction.updateTransaction)

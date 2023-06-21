@@ -73,7 +73,7 @@ onMounted(() => {
                 </span>
             </h3>
             <h3 class="text-indigo-900">Tổng số dư:
-                <span :class="totalBalance >= 0 ? 'text-green-500' : 'text-red-500'" class="font-bold">
+                <span class="font-bold text-blue-500">
                     {{ Number(totalBalance).toLocaleString('de-DE') + ' VNĐ' }}
                 </span>
             </h3>
