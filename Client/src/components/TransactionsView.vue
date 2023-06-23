@@ -5,6 +5,7 @@ import { useToast } from 'vue-toast-notification'
 import { useCategoryStore } from '../stores/category.store'
 import Loading from './Loading.vue'
 import Card from '../components/Card.vue'
+import moment from 'moment'
 
 const transactionStore = useTransactionStore()
 const categoryStore = useCategoryStore()
@@ -14,9 +15,9 @@ const select = ref({
     date: 'all',
     type: 'all',
     categoryId: 'all',
-    sort: 1,
-    startDate: '',
-    endDate: ''
+    sort: -1,
+    startDate: moment(new Date()).format('YYYY-MM-DD'),
+    endDate: moment(new Date()).format('YYYY-MM-DD')
 })
 const transaction = ref(null)
 const categorys = ref([])
@@ -49,6 +50,7 @@ const findAllCategorys = async (type) => {
 watch(() => select.value.type, async () => {
     if (select.value.type == 'all') {
         categorys.value = []
+        select.value.categoryId = 'all'
     } else {
         await findAllCategorys(select.value.type)
     }
@@ -59,8 +61,7 @@ onMounted(() => {
 })
 </script>
 <template>
-    <h1 class="text-2xl font-bold text-indigo-900">Tất Cả Giao Dịch</h1>
-    <div class="w-full h-[100%] mt-2">
+    <section class="w-full h-[100%] flex flex-col">
         <div class="w-[100%] border-[3px] border-white rounded-xl bg-slate-100 text-center p-4 flex justify-around">
             <h3 class="text-indigo-900">Tổng thu nhập:
                 <span class="text-green-500 font-bold">
@@ -95,12 +96,12 @@ onMounted(() => {
                     <div class="flex items-center justify-center gap-2" v-if="select.date === 'other'">
                         <div>
                             <label class="text-sm">Từ ngày:</label>
-                            <input type="date" v-model="select.startDate" :max="select.endDate"
+                            <input type="date" v-model="select.startDate" :max="select.endDate" required
                                 class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-600">
                         </div>
                         <div>
                             <label class="text-sm">Đến ngày:</label>
-                            <input type="date" v-model="select.endDate" :min="select.startDate"
+                            <input type="date" v-model="select.endDate" :min="select.startDate" required
                                 class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-600">
                         </div>
                     </div>
@@ -127,8 +128,8 @@ onMounted(() => {
                         <label class="text-base">Sắp xếp:</label>
                         <select v-model="select.sort"
                             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
-                            <option value="1">Tăng dần</option>
-                            <option value="-1">Giảm dần</option>
+                            <option value="-1">Ngày giảm dần</option>
+                            <option value="1">Ngày tăng dần</option>
                         </select>
                     </div>
                     <div>
@@ -140,7 +141,7 @@ onMounted(() => {
                     </div>
                 </form>
             </div>
-            <div class="w-[60%] h-[80%] overflow-auto">
+            <div class="w-[60%] overflow-auto">
                 <Loading v-if="transactionStore.isLoading" />
                 <Card v-else v-for="item in transaction" :transaction="item" :key="item._id" :del="'no'"
                     @submitEvent="getTransaction" />
@@ -150,5 +151,5 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </template>

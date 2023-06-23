@@ -101,7 +101,7 @@ watch(() => select.type, () => {
     <div class="flex flex-col gap-2">
         <div class="flex gap-5 justify-between">
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
-                <div class="bg-white h-full w-[30%] flex justify-center items-center text-3xl">
+                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl">
                     <i class="fa-regular fa-money-bill-1 text-green-500"></i>
                 </div>
                 <div class="h-full p-2">
@@ -114,7 +114,7 @@ watch(() => select.type, () => {
                 </div>
             </div>
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
-                <div class="bg-white h-full w-[30%] flex justify-center items-center text-3xl">
+                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl">
                     <i class="fa-regular fa-money-bill-1 text-red-500"></i>
                 </div>
                 <div class="p-2">
@@ -127,7 +127,7 @@ watch(() => select.type, () => {
                 </div>
             </div>
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
-                <div class="bg-white h-full w-[30%] flex justify-center items-center text-3xl">
+                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl">
                     <i class="fa-regular fa-money-bill-1 text-blue-500"></i>
                 </div>
                 <div class="p-2">

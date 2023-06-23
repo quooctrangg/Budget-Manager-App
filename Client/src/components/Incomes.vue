@@ -38,29 +38,31 @@ onMounted(() => {
 })
 </script>
 <template>
-    <h1 class="text-2xl font-bold text-indigo-900">Thu Nhập</h1>
-    <div class="w-full h-[100%] mt-2">
-        <div class="w-[100%] border-[3px] border-white rounded-xl bg-slate-100 text-center p-4">
-            <h3 class="text-indigo-900">
-                Tổng thu nhập:
-                <span class="text-lime-500 font-bold">
-                    {{ Number(sumAmount).toLocaleString('de-DE') + ' VNĐ' }}
-                </span>
-            </h3>
-        </div>
-        <div class="w-full h-[100%] flex mt-5 gap-3">
-            <div class="w-[30%] h-full">
-                <FormAdd :type="1" @submitEvent="getTransaction" />
+    <section class="flex flex-col h-full">
+        <h1 class="text-2xl font-bold text-indigo-900">Thu Nhập</h1>
+        <div class="w-full h-[100%] flex flex-col">
+            <div class="w-[100%] border-[3px] border-white rounded-xl bg-slate-100 text-center p-4">
+                <h3 class="text-indigo-900">
+                    Tổng thu nhập:
+                    <span class="text-lime-500 font-bold">
+                        {{ Number(sumAmount).toLocaleString('de-DE') + ' VNĐ' }}
+                    </span>
+                </h3>
             </div>
-            <div class="w-[70%] h-[80%] overflow-auto">
-                <Loading v-if="transactionStore.isLoading" />
-                <Card v-else v-for="item in transaction" :transaction="item" :key="item._id" @submitEvent="getTransaction"
-                    @submitEdit="(id) => findTransactionById(id)" />
-                <div v-if="transaction == null || transaction?.length == 0"
-                    class="w-full h-full flex justify-center items-center">
-                    <span class="text-xl text-red-500 font-bold">Không có giao dịch!</span>
+            <div class="w-full h-[100%] flex mt-5 gap-3">
+                <div class="w-[30%] h-full">
+                    <FormAdd :type="1" @submitEvent="getTransaction" />
+                </div>
+                <div class="w-[70%] overflow-auto">
+                    <Loading v-if="transactionStore.isLoading" />
+                    <Card v-else v-for="item in transaction" :transaction="item" :key="item._id"
+                        @submitEvent="getTransaction" @submitEdit="(id) => findTransactionById(id)" />
+                    <div v-if="transaction == null || transaction?.length == 0"
+                        class="w-full h-full flex justify-center items-center">
+                        <span class="text-xl text-red-500 font-bold">Không có giao dịch!</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </template>

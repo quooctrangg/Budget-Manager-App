@@ -58,7 +58,7 @@ const clickShowUpdateTransaction = id => {
                 </div>
             </div>
         </div>
-        <div class="p-5 flex flex-col gap-5 items-center">
+        <div class="p-5 flex flex-col items-center gap-3">
             <i v-if="props?.del !== 'no'" class="fa-solid fa-pen-to-square cursor-pointer text-sky-500 hover:text-sky-400"
                 @click="clickShowUpdateTransaction(props.transaction._id)"></i>
             <i class="fa-solid fa-trash cursor-pointer text-red-500 hover:text-red-400" @click="() => {

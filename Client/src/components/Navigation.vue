@@ -41,7 +41,7 @@ const submitLogout = async () => {
                     Số dư:
                     {{ Number(transactionStore.total).toLocaleString('de-DE') + ' VNĐ' }}
                 </span>
-                <span class="text-sm text-red-600" v-if="transactionStore.warningTotal">Bạn đã chi tiêu quá mức!!!</span>
+                <span class="text-sm text-red-600" v-if="transactionStore.warningTotal">Số dư của bạn quá thấp!</span>
             </div>
             <nav class="h-auto flex flex-col gap-5 mt-5 px-5">
                 <router-link v-for="item in navbarStore.navbarItems" :key="item.id" :to="{ name: '' }" class="h-auto w-full"

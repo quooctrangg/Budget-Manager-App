@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
-import moment from 'moment'
+import { ref, onMounted } from 'vue'
 import { useToast } from 'vue-toast-notification'
+import moment from 'moment'
 
 import transactionService from '../services/transaction.service'
 
@@ -17,7 +17,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     const data = ref({
         userId: '',
         amount: '',
-        date: '',
+        date: moment(new Date()).format('YYYY-MM-DD'),
         type: '',
         categoryId: '',
         note: ''
@@ -27,7 +27,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     const resetData = () => {
         data.value.userId = ''
         data.value.amount = ''
-        data.value.date = ''
+        data.value.date = moment(new Date()).format('YYYY-MM-DD')
         data.value.type = ''
         data.value.categoryId = ''
         data.value.note = ''
@@ -68,6 +68,7 @@ export const useTransactionStore = defineStore('transaction', () => {
             let res = await transactionService.createTransaction(data)
             if (res.code !== 200) throw new Error(res.message)
             result.value = res
+            getTotal()
         } catch (error) {
             err.value = error.message
         } finally {
@@ -101,6 +102,7 @@ export const useTransactionStore = defineStore('transaction', () => {
             let res = await transactionService.deleteTransaction(id)
             if (res.code !== 200) throw new Error(res.message)
             result.value = res
+            getTotal()
         } catch (error) {
             err.value = error.message
         } finally {
@@ -131,6 +133,7 @@ export const useTransactionStore = defineStore('transaction', () => {
             let res = await transactionService.updateTransaction(id, data)
             if (res.code !== 200) throw new Error(res.message)
             result.value = res
+            getTotal()
         } catch (error) {
             err.value = error.message
         } finally {
@@ -181,6 +184,7 @@ export const useTransactionStore = defineStore('transaction', () => {
             if (res.data[0]?.count != 0) {
                 if (res.data[0]?.totalAmount < 200000) {
                     warningTotal.value = true
+                    $toast.warning('Số dư của bạn quá thấp!', { position: 'top-right' })
                 } else {
                     warningTotal.value = false
                 }
@@ -192,10 +196,8 @@ export const useTransactionStore = defineStore('transaction', () => {
         }
     }
 
-    watch(() => isLoading.value, (newdata) => {
-        if (newdata) {
-            getTotal()
-        }
+    onMounted(() => {
+        getTotal()
     })
 
     return {

@@ -15,7 +15,7 @@ const props = defineProps(['type'])
 const emits = defineEmits(['submitEvent'])
 
 const categoryErr = ref(false)
-const categorys = ref(null)
+const categorys = ref([])
 const date = ref(new Date())
 
 const submitTransaction = async () => {
@@ -51,6 +51,10 @@ const findAllCategorys = async () => {
         return
     }
     categorys.value = categoryStore.result.data
+    let index = categorys.value.findIndex(category => category.name == 'Khác')
+    let temp = categorys.value[index]
+    categorys.value[index] = categorys.value[categorys.value.length - 1]
+    categorys.value[categorys.value.length - 1] = temp
 }
 
 const cancelSubmit = () => {
