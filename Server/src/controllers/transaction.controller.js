@@ -50,9 +50,9 @@ const updateTransaction = async (req, res, next) => {
     }
 }
 
-const chartLine = async (req, res, next) => {
+const chartBar = async (req, res, next) => {
     try {
-        let message = await transactionService.chartLine(req.id, req.query)
+        let message = await transactionService.chartBar(req.id, req.query)
         return res.json(message)
     } catch (error) {
         return next(new ApiError(500, error.message))
@@ -83,7 +83,7 @@ module.exports = {
     findByIdTransaction,
     deleteTransaction,
     updateTransaction,
-    chartLine,
+    chartBar,
     chartDoughnut,
     sumTotal
 }

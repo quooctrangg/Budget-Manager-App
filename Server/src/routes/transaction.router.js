@@ -7,8 +7,8 @@ router.route('/')
     .get(middlewares.checkLogin, transaction.findAllTransactionsByUserId)
     .post(middlewares.checkLogin, transaction.createTransaction)
 
-router.route('/chartline')
-    .get(middlewares.checkLogin, transaction.chartLine)
+router.route('/chartbar')
+    .get(middlewares.checkLogin, transaction.chartBar)
 
 router.route('/chartdoughnut')
     .get(middlewares.checkLogin, transaction.chartDoughnut)

@@ -66,7 +66,7 @@ const updateTransaction = async (id, newdata) => {
     return new ApiRes(200, 'success', 'Cập nhật giao dịch thành công!', data)
 }
 
-const chartLine = async (userId, select) => {
+const chartBar = async (userId, select) => {
     const { type, startdate, enddate } = select
     let format = ''
     let start = new Date(startdate)
@@ -174,7 +174,7 @@ module.exports = {
     findByIdTransaction,
     deleteTransaction,
     updateTransaction,
-    chartLine,
+    chartBar,
     chartDoughnut,
     sumTotal
 }
