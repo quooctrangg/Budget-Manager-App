@@ -37,7 +37,7 @@ const submitLogout = async () => {
                     <img src="logo.png" alt="logo">
                 </div>
                 <p class="text-center h-auto">Xin chào, {{ userStore.nameFilter() }}</p>
-                <span class="text-sm text-blue-500">
+                <span class="text-xl font-semibold text-red-500">
                     Số dư:
                     {{ Number(transactionStore.total).toLocaleString('de-DE') + ' VNĐ' }}
                 </span>

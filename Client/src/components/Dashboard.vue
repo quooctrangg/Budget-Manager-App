@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, watch, computed } from 'vue'
 import ChartDoughnut from '../components/ChartDoughnut.vue'
-import ChartLine from './ChartLine.vue'
+import ChartBar from './ChartBar.vue'
 import moment from 'moment';
 
 const select = reactive({
@@ -34,7 +34,6 @@ const handleSetDate = type => {
             break
     }
 }
-
 
 const handleNext = () => {
     switch (select.type) {
@@ -99,47 +98,6 @@ watch(() => select.type, () => {
 </script>
 <template>
     <div class="flex flex-col gap-2">
-        <div class="flex gap-5 justify-between">
-            <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
-                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl">
-                    <i class="fa-regular fa-money-bill-1 text-green-500"></i>
-                </div>
-                <div class="h-full p-2">
-                    <h3 class="font-semibold text-base text-gray-600">Tổng thu nhập</h3>
-                    <span class="text-gray-500">
-                        {{
-                            Number(totalIncomes).toLocaleString('de-DE') + ' VNĐ'
-                        }}
-                    </span>
-                </div>
-            </div>
-            <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
-                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl">
-                    <i class="fa-regular fa-money-bill-1 text-red-500"></i>
-                </div>
-                <div class="p-2">
-                    <h3 class="font-semibold text-base text-gray-600 ">Tổng chi tiêu</h3>
-                    <span class="text-gray-500">
-                        {{
-                            Number(totalExpenses).toLocaleString('de-DE') + ' VNĐ'
-                        }}
-                    </span>
-                </div>
-            </div>
-            <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
-                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl">
-                    <i class="fa-regular fa-money-bill-1 text-blue-500"></i>
-                </div>
-                <div class="p-2">
-                    <h3 class="font-semibold text-base text-gray-600 ">Tổng số dư</h3>
-                    <span class="text-gray-500">
-                        {{
-                            Number(totalBalance).toLocaleString('de-DE') + ' VNĐ'
-                        }}
-                    </span>
-                </div>
-            </div>
-        </div>
         <div class="flex gap-5">
             <div class="flex gap-2 items-center">
                 <label class="text-base">Thống kê theo:</label>
@@ -167,6 +125,48 @@ watch(() => select.type, () => {
                 </div>
             </div>
         </div>
+        <div class="flex gap-5 justify-between">
+            <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
+                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl">
+                    <i class="fa-regular fa-money-bill-1 text-green-500"></i>
+                </div>
+                <div class="h-full p-2">
+                    <h3 class="font-semibold text-base text-green-500">Tổng thu nhập</h3>
+                    <span class="text-gray-500">
+                        {{
+                            Number(totalIncomes).toLocaleString('de-DE') + ' VNĐ'
+                        }}
+                    </span>
+                </div>
+            </div>
+            <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
+                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl">
+                    <i class="fa-regular fa-money-bill-1 text-red-500"></i>
+                </div>
+                <div class="p-2">
+                    <h3 class="font-semibold text-base text-red-500">Tổng chi tiêu</h3>
+                    <span class="text-gray-500">
+                        {{
+                            Number(totalExpenses).toLocaleString('de-DE') + ' VNĐ'
+                        }}
+                    </span>
+                </div>
+            </div>
+            <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
+                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl">
+                    <i class="fa-regular fa-money-bill-1 text-blue-500"></i>
+                </div>
+                <div class="p-2">
+                    <h3 class="font-semibold text-base text-blue-500">Tổng số dư</h3>
+                    <span class="text-gray-500">
+                        {{
+                            Number(totalBalance).toLocaleString('de-DE') + ' VNĐ'
+                        }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
         <div class="flex-1">
             <div v-if="chart == 'line'" class="border-[3px] border-white rounded-xl bg-slate-100 p-2 h-[100%]">
                 <div class="flex justify-between items-center">
@@ -181,7 +181,7 @@ watch(() => select.type, () => {
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
-                <ChartLine :data="selectType" @datatotal="(data) => totalTransaction(data)" />
+                <ChartBar :data="selectType" @datatotal="(data) => totalTransaction(data)" />
             </div>
             <div v-else class="h-[100%] flex flex-col">
                 <div class="flex justify-between items-center">

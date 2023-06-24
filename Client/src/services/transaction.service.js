@@ -25,8 +25,8 @@ class transactionService {
         return (await this.api.get(`/?${select}`)).data
     }
 
-    async chartLineTransaction(select) {
-        return (await this.api.get(`/chartline/?${select}`)).data
+    async chartBarTransaction(select) {
+        return (await this.api.get(`/chartbar/?${select}`)).data
     }
 
     async chartDoughnutTransaction(select) {

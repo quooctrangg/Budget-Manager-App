@@ -14,8 +14,6 @@ const emits = defineEmits(['datatotal'])
 
 ChartJs.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement)
 
-const color = ['rgba(255, 0, 0, 0.7)', 'rgba(255, 128, 0, 0.7)', 'rgba(255, 255, 0,0.7)', 'rgba(128, 255, 0,0.7)', 'rgba(0, 255, 0, 0.7)', 'rgba(0, 255, 128, 0.7)',
-    'rgba(0, 255, 255, 0.7)', 'rgba(0, 128, 255, 0.7)', 'rgba(0, 0, 255, 0.7)', 'rgba(127, 0, 255, 0.7)', 'rgba(255, 0, 255, 0.7)', 'rgba(255, 0, 127, 0.7)', 'rgba(128, 128, 128, 0.7)']
 const options = { responsive: true, aspectRatio: 2, maintainAspectRatio: false }
 
 const isLoading = ref(false)
@@ -23,7 +21,7 @@ const dataDoughnutIncomes = reactive({
     labels: [],
     datasets: [{
         data: [],
-        backgroundColor: color,
+        backgroundColor: ['rgba(0, 102, 204, 0.7)', 'rgba(0, 204, 153, 0.7)', 'rgba(102, 255, 255, 0.7)', 'rgba(51, 102, 255, 0.7)', 'rgba(0, 204, 153, 0.7)', 'rgba(0, 204, 0, 0.7)', 'rgba(102, 255, 255, 0.7)', 'rgba(102, 102, 255, 0.7)', 'rgba(204, 51, 255, 0.7)', 'rgba(51, 204, 51, 0.7)'],
         hoverOffset: 4
     }],
     options
@@ -32,7 +30,7 @@ const dataDoughnutExpenses = reactive({
     labels: [],
     datasets: [{
         data: [],
-        backgroundColor: color,
+        backgroundColor: ['rgba(255, 153, 0, 0.7)', 'rgba(255, 51, 0, 0.7)', 'rgba(255, 255, 0, 0.7)', 'rgba(255, 0, 102, 0.7)', 'rgba(255, 51, 204, 0.7)', 'rgba(204, 255, 51, 0.7)', 'rgba(204, 51, 0, 0.7)', 'rgba(204, 0, 0, 0.7)', 'rgba(102, 0, 51, 0.7)', 'rgba(153, 0, 153, 0.7)'],
         hoverOffset: 4
     }],
     options
@@ -90,12 +88,12 @@ onMounted(async () => {
         <div class="flex flex-col justify-center items-center flex-1">
             <div v-if="!chartIncomes.datasets[0].data.length" class="text-red-500">Chưa có dữ liệu...</div>
             <Doughnut v-else :data="chartIncomes" class="w-full h-full" />
-            <h3>Thu nhập</h3>
+            <h3 class="text-xl font-semibold text-blue-500">Thu nhập</h3>
         </div>
         <div class="flex flex-col justify-center items-center flex-1">
             <div v-if="!chartExpenses.datasets[0].data.length" class="text-red-500">Chưa có dữ liệu...</div>
             <Doughnut v-else :data="chartExpenses" class="w-full h-full" />
-            <h3>Chi tiêu</h3>
+            <h3 class="text-xl font-semibold text-red-500">Chi tiêu</h3>
         </div>
     </div>
 </template>
