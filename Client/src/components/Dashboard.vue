@@ -113,14 +113,14 @@ watch(() => select.type, () => {
                     <input type="radio" id="line" value="line" v-model="chart"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" />
                     <label for="line" class="ml-2 text-base font-medium text-gray-900">
-                        Thống kê "Thu nhập và chi tiêu"
+                        Thống kê Thu nhập và chi tiêu
                     </label>
                 </div>
                 <div class="flex gap-1 items-center">
                     <input type="radio" id="doughnut" value="doughnut" v-model="chart"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" />
                     <label for="doughnut" class="ml-2 text-base font-medium text-gray-900">
-                        Thống kê "Chi phí theo danh mục"
+                        Thống kê Chi phí theo danh mục
                     </label>
                 </div>
             </div>
@@ -183,7 +183,7 @@ watch(() => select.type, () => {
                 </div>
                 <ChartBar :data="selectType" @datatotal="(data) => totalTransaction(data)" />
             </div>
-            <div v-else class="h-[100%] flex flex-col">
+            <div v-else class="h-[100%] flex flex-col border-[3px] border-white rounded-xl bg-slate-100 p-2">
                 <div class="flex justify-between items-center">
                     <button class="px-2 text-2xl text-red-500 hover:text-red-300" @click="handleBack">
                         <i class="fa-solid fa-chevron-left"></i>

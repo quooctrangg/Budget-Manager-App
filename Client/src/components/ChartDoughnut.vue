@@ -83,8 +83,7 @@ onMounted(async () => {
 </script>
 <template>
     <Loading v-if="isLoading" />
-    <div v-else
-        class="flex gap-10 justify-center text-lg text-gray-700 border-[3px] border-white rounded-xl bg-slate-100 p-2">
+    <div v-else class="flex gap-10 justify-center text-lg text-gray-700">
         <div class="flex flex-col justify-center items-center flex-1">
             <div v-if="!chartIncomes.datasets[0].data.length" class="text-red-500">Chưa có dữ liệu...</div>
             <Doughnut v-else :data="chartIncomes" class="w-full h-full" />
