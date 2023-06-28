@@ -30,7 +30,7 @@ const clickShowUpdateTransaction = id => {
     <div
         class="rounded-md border-[2px] border-white bg-slate-100 bg-opacity-50 w-full p-1 focus:border-green-500 flex justify-between items-center mb-2">
         <div class="flex w-full gap-2 items-center">
-            <div class="w-[10%]">
+            <div class="w-[10%] max-lg:hidden">
                 <img :src="`http://localhost:8000/public/` + props.transaction.categoryId.image"
                     :alt="props.transaction.categoryId.name">
             </div>
@@ -38,7 +38,7 @@ const clickShowUpdateTransaction = id => {
                 <div :class="props.transaction.categoryId.type === 1 ? 'text-green-500' : 'text-red-500'"
                     class="w-full flex gap-10 items-center">
                     <h3 class="w-full">{{ props.transaction.categoryId.name }}</h3>
-                    <h4 class="w-full flex gap-1 items-center text-gray-600">
+                    <h4 class="w-full flex gap-1 items-center text-gray-600 max-lg:text-sm max-sm:text-sm">
                         <i class="fa-regular fa-calendar-days"></i>
                         <span>
                             {{ moment(props.transaction.date).format('DD-MM-YYYY') }}
@@ -49,9 +49,9 @@ const clickShowUpdateTransaction = id => {
                     <h4 class="w-auto flex gap-1 items-center">
                         {{ Number(props.transaction.amount).toLocaleString('de-DE') + ' VNĐ' }}
                     </h4>
-                    <h4 class="flex-1">
-                        <span class="break-words">
-                            <i class="fa-solid fa-message"></i>
+                    <h4 class="flex-1 max-sm:text-xs">
+                        <span class="break-words" v-if="props.transaction.note">
+                            <i class="fa-solid fa-message max-lg:hidden"></i>
                             {{ props.transaction.note }}
                         </span>
                     </h4>

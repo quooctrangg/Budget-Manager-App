@@ -47,11 +47,11 @@ onMounted(() => {
                     </span>
                 </h3>
             </div>
-            <div class="w-full h-[100%] flex mt-5 gap-3">
-                <div class="w-[30%] h-full">
-                    <FormAdd :type="-1" @submitEvent="getTransaction" />
+            <div class="w-full h-[100%] flex mt-5 gap-3 max-sm:flex-col">
+                <div class="w-[30%] h-full  max-sm:w-full max-sm:flex-1">
+                    <FormAdd :type="-1" @submitEvent="getTransaction" class="max-sm:h-full" />
                 </div>
-                <div class="w-[70%] overflow-auto">
+                <div class="w-[70%] overflow-auto max-sm:w-full max-sm:flex-1">
                     <Loading v-if="transactionStore.isLoading" />
                     <Card v-else v-for="item in transaction" :transaction="item" :key="item._id"
                         @submitEvent="getTransaction" @submitEdit="(id) => findTransactionById(id)" />

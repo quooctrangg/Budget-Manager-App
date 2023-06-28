@@ -37,20 +37,21 @@ const submitLogout = async () => {
                     <img src="logo.png" alt="logo">
                 </div>
                 <p class="text-center h-auto">Xin chào, {{ userStore.nameFilter() }}</p>
-                <span class="text-xl font-semibold text-red-500">
+                <span class="text-xl font-semibold text-orange-500 max-lg:text-base max-sm:text-sm text-center">
                     Số dư:
                     {{ Number(transactionStore.total).toLocaleString('de-DE') + ' VNĐ' }}
                 </span>
                 <span class="text-sm text-red-600" v-if="transactionStore.warningTotal">Số dư của bạn quá thấp!</span>
             </div>
-            <nav class="h-auto flex flex-col gap-5 mt-5 px-5">
-                <router-link v-for="item in navbarStore.navbarItems" :key="item.id" :to="{ name: '' }" class="h-auto w-full"
-                    @click="selectNavbarItem(item.id)" :class="{ 'text-indigo-900': item.id === navbarStore.activeIndex }">
+            <nav class="h-auto flex flex-col gap-5 mt-5 px-5 max-sm:text-center">
+                <router-link v-for="item in navbarStore.navbarItems" :key="item.id" :to="{ name: '' }"
+                    class="h-auto w-full max-lg:text-sm" @click="selectNavbarItem(item.id)"
+                    :class="{ 'text-indigo-900': item.id === navbarStore.activeIndex }">
                     <span v-if="item.id === navbarStore.activeIndex"
                         class="border-l-[4px] border-indigo-900 rounded-xl mr-2">
                     </span>
                     <i :class="item.icon" class="h-auto w-auto"></i>
-                    {{ item.name }}
+                    <span class="max-sm:hidden">{{ item.name }}</span>
                 </router-link>
             </nav>
         </div>
@@ -60,7 +61,9 @@ const submitLogout = async () => {
             </button>
             <button class="h-auto text-red-600" @click="submitLogout">
                 <i class="fa-solid fa-right-from-bracket h-auto w-auto"></i>
-                Đăng xuất
+                <span class="max-lg:hidden">
+                    Đăng xuất
+                </span>
             </button>
         </div>
     </div>

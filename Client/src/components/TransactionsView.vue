@@ -62,7 +62,8 @@ onMounted(() => {
 </script>
 <template>
     <section class="w-full h-[100%] flex flex-col">
-        <div class="w-[100%] border-[3px] border-white rounded-xl bg-slate-100 text-center p-4 flex justify-around">
+        <div
+            class="w-[100%] border-[3px] border-white rounded-xl bg-slate-100 text-center p-4 flex justify-around max-sm:text-sm">
             <h3 class="text-indigo-900">Tổng thu nhập:
                 <span class="text-green-500 font-bold">
                     {{ Number(totalIncomes).toLocaleString('de-DE') + ' VNĐ' }}
@@ -79,69 +80,72 @@ onMounted(() => {
                 </span>
             </h3>
         </div>
-        <div class="w-full h-[100%] flex mt-5 gap-3">
-            <div class="w-[40%] h-full">
-                <form class="flex flex-col gap-2" @submit.prevent="getTransaction">
+        <div class="w-full h-[100%] flex mt-5 gap-3 max-sm:flex-col max-sm:mt-2">
+            <div class="w-[40%] h-full max-sm:w-full max-sm:flex-1">
+                <form class="flex flex-col gap-2 text-base max-sm:gap-1 max-sm:h-full max-sm:text-sm"
+                    @submit.prevent="getTransaction">
                     <div>
-                        <label class="text-base">Thời gian:</label>
-                        <select v-model="select.date"
-                            class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
-                            <option value="all">Tất cả</option>
-                            <option value="1day">1 ngày qua</option>
-                            <option value="7days">7 ngày qua</option>
-                            <option value="30days">30 ngày qua</option>
-                            <option value="other">Tùy chỉnh...</option>
-                        </select>
-                    </div>
-                    <div class="flex items-center justify-center gap-2" v-if="select.date === 'other'">
                         <div>
-                            <label class="text-sm">Từ ngày:</label>
-                            <input type="date" v-model="select.startDate" :max="select.endDate" required
-                                class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-600">
+                            <label class="">Thời gian:</label>
+                            <select v-model="select.date"
+                                class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0">
+                                <option value="all">Tất cả</option>
+                                <option value="1day">1 ngày qua</option>
+                                <option value="7days">7 ngày qua</option>
+                                <option value="30days">30 ngày qua</option>
+                                <option class="max-sm:hidden" value="other">Tùy chỉnh...</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center justify-center gap-2" v-if="select.date === 'other'">
+                            <div>
+                                <label class="text-sm">Từ ngày:</label>
+                                <input type="date" v-model="select.startDate" :max="select.endDate" required
+                                    class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0  text-gray-600">
+                            </div>
+                            <div>
+                                <label class="text-sm">Đến ngày:</label>
+                                <input type="date" v-model="select.endDate" :min="select.startDate" required
+                                    class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0  text-gray-600">
+                            </div>
                         </div>
                         <div>
-                            <label class="text-sm">Đến ngày:</label>
-                            <input type="date" v-model="select.endDate" :min="select.startDate" required
-                                class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-1 focus:border-green-500 outline-0 text-base text-gray-600">
+                            <label class="">Giao dịch:</label>
+                            <select v-model="select.type"
+                                class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 ">
+                                <option value="all">Tất cả</option>
+                                <option value="1">Thu nhập</option>
+                                <option value="-1">Chi tiêu</option>
+                            </select>
                         </div>
-                    </div>
-                    <div>
-                        <label class="text-base">Giao dịch:</label>
-                        <select v-model="select.type"
-                            class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
-                            <option value="all">Tất cả</option>
-                            <option value="1">Thu nhập</option>
-                            <option value="-1">Chi tiêu</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-base">Phân loại:</label>
-                        <select v-model="select.categoryId"
-                            class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
-                            <option value="all">Tất cả</option>
-                            <option v-for="category in categorys" :key="category._id" :value="category._id">
-                                {{ category.name }}
-                            </option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-base">Sắp xếp:</label>
-                        <select v-model="select.sort"
-                            class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base">
-                            <option value="-1">Ngày giảm dần</option>
-                            <option value="1">Ngày tăng dần</option>
-                        </select>
-                    </div>
-                    <div>
-                        <button type="submit"
-                            class="w-full border py-1 px-2 rounded-lg bg-green-500 hover:bg-green-300 flex items-center justify-center gap-2 text-gray-600 text-base mt-5">
-                            <i class="fa-solid fa-filter"></i>
-                            Lọc
-                        </button>
+                        <div>
+                            <label class="">Phân loại:</label>
+                            <select v-model="select.categoryId"
+                                class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 ">
+                                <option value="all">Tất cả</option>
+                                <option v-for="category in categorys" :key="category._id" :value="category._id">
+                                    {{ category.name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="">Sắp xếp:</label>
+                            <select v-model="select.sort"
+                                class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 ">
+                                <option value="-1">Ngày giảm dần</option>
+                                <option value="1">Ngày tăng dần</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit"
+                                class="w-full border py-1 px-2 rounded-lg bg-green-500 hover:bg-green-300 flex items-center justify-center gap-2 text-gray-600 mt-5 max-sm:mt-2">
+                                <i class="fa-solid fa-filter"></i>
+                                Lọc
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
-            <div class="w-[60%] overflow-auto">
+            <div class="w-[60%] overflow-auto max-sm:w-full max-sm:flex-1">
                 <Loading v-if="transactionStore.isLoading" />
                 <Card v-else v-for="item in transaction" :transaction="item" :key="item._id" :del="'no'"
                     @submitEvent="getTransaction" />

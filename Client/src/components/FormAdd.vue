@@ -69,7 +69,7 @@ onMounted(() => {
 })
 </script>
 <template>
-    <form class="w-full  flex flex-col gap-3" @submit.prevent="submitTransaction">
+    <form class="w-full flex flex-col gap-3" @submit.prevent="submitTransaction">
         <input type="number" required v-model="transactionStore.data.amount" :max="props.type == -1 ? -1 : ''"
             :min="props.type == 1 ? 1 : ''"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base"
@@ -84,7 +84,7 @@ onMounted(() => {
         <span v-if="categoryErr" class="text-red-500 text-xs">Hãy chọn loại giao dịch!</span>
         <textarea rows="5" placeholder="Ghi chú" maxlength="100" v-model="transactionStore.data.note"
             class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 w-full p-2 focus:border-green-500 outline-0 text-base"></textarea>
-        <div class="w-full flex justify-center">
+        <div class="w-full flex justify-center h-full">
             <button type="submit" v-if="!transactionStore.isShowEdit"
                 class="w-auto border py-1 px-2 rounded-lg bg-green-500 hover:bg-green-300 flex items-center gap-2 text-gray-700">
                 <i class="fa-solid fa-plus"></i>

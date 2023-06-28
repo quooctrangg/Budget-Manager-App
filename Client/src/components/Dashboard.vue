@@ -98,11 +98,11 @@ watch(() => select.type, () => {
 </script>
 <template>
     <div class="flex flex-col gap-2">
-        <div class="flex gap-5">
+        <div class="flex gap-5 text-base max-lg:text-sm max-sm:text-xs">
             <div class="flex gap-2 items-center">
-                <label class="text-base">Thống kê theo:</label>
+                <label>Thống kê theo:</label>
                 <select v-model="select.type"
-                    class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 p-2 focus:border-green-500 outline-0 text-base">
+                    class="rounded-md border-[3px] border-white bg-slate-100 h-[100%] bg-opacity-50 p-2 focus:border-green-500 outline-0  max-sm:p-1">
                     <option value="week">Tuần</option>
                     <option value="month">Tháng</option>
                     <option value="year">Năm</option>
@@ -112,26 +112,26 @@ watch(() => select.type, () => {
                 <div class="flex gap-1 items-center">
                     <input type="radio" id="line" value="line" v-model="chart"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" />
-                    <label for="line" class="ml-2 text-base font-medium text-gray-900">
+                    <label for="line" class="ml-2 font-medium text-gray-900">
                         Thống kê Thu nhập và chi tiêu
                     </label>
                 </div>
                 <div class="flex gap-1 items-center">
                     <input type="radio" id="doughnut" value="doughnut" v-model="chart"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" />
-                    <label for="doughnut" class="ml-2 text-base font-medium text-gray-900">
+                    <label for="doughnut" class="ml-2 font-medium text-gray-900">
                         Thống kê Chi phí theo danh mục
                     </label>
                 </div>
             </div>
         </div>
-        <div class="flex gap-5 justify-between">
+        <div class="flex gap-5 justify-between text-base max-lg:text-sm  max-sm:text-xs">
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
-                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl">
+                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl max-sm:hidden">
                     <i class="fa-regular fa-money-bill-1 text-green-500"></i>
                 </div>
                 <div class="h-full p-2">
-                    <h3 class="font-semibold text-base text-green-500">Tổng thu nhập</h3>
+                    <h3 class="font-semibold text-green-500">Tổng thu nhập</h3>
                     <span class="text-gray-500">
                         {{
                             Number(totalIncomes).toLocaleString('de-DE') + ' VNĐ'
@@ -140,11 +140,11 @@ watch(() => select.type, () => {
                 </div>
             </div>
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
-                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl">
+                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl max-sm:hidden">
                     <i class="fa-regular fa-money-bill-1 text-red-500"></i>
                 </div>
                 <div class="p-2">
-                    <h3 class="font-semibold text-base text-red-500">Tổng chi tiêu</h3>
+                    <h3 class="font-semibold text-red-500">Tổng chi tiêu</h3>
                     <span class="text-gray-500">
                         {{
                             Number(totalExpenses).toLocaleString('de-DE') + ' VNĐ'
@@ -153,11 +153,11 @@ watch(() => select.type, () => {
                 </div>
             </div>
             <div class="w-full border-[3px] border-white rounded-xl bg-slate-100 flex items-center">
-                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl">
+                <div class="bg-white h-full w-[30%] flex justify-center items-center text-4xl max-sm:hidden">
                     <i class="fa-regular fa-money-bill-1 text-blue-500"></i>
                 </div>
                 <div class="p-2">
-                    <h3 class="font-semibold text-base text-blue-500">Tổng số dư</h3>
+                    <h3 class="font-semibold text-blue-500">Tổng số dư</h3>
                     <span class="text-gray-500">
                         {{
                             Number(totalBalance).toLocaleString('de-DE') + ' VNĐ'
@@ -166,9 +166,9 @@ watch(() => select.type, () => {
                 </div>
             </div>
         </div>
-
         <div class="flex-1">
-            <div v-if="chart == 'line'" class="border-[3px] border-white rounded-xl bg-slate-100 p-2 h-[100%]">
+            <div v-if="chart == 'line'"
+                class="border-[3px] border-white rounded-xl bg-slate-100 p-2 h-[100%] flex flex-col">
                 <div class="flex justify-between items-center">
                     <button class="px-2 text-2xl text-red-500 hover:text-red-300" @click="handleBack">
                         <i class="fa-solid fa-chevron-left"></i>
@@ -181,7 +181,9 @@ watch(() => select.type, () => {
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
-                <ChartBar :data="selectType" @datatotal="(data) => totalTransaction(data)" />
+                <div class="flex-1 flex items-center">
+                    <ChartBar :data="selectType" @datatotal="(data) => totalTransaction(data)" />
+                </div>
             </div>
             <div v-else class="h-[100%] flex flex-col border-[3px] border-white rounded-xl bg-slate-100 p-2">
                 <div class="flex justify-between items-center">

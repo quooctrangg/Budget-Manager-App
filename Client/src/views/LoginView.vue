@@ -31,9 +31,9 @@ const submitLogin = async () => {
 <template>
     <section>
         <div class="flex items-center justify-center px-6 py-8">
-            <div class="shadow w-[25%] rounded-lg overflow-hidden">
+            <div class="shadow w-[25%] rounded-lg overflow-hidden max-sm:w-[50%]">
                 <div class="p-6 bg-white bg-opacity-50">
-                    <h1 class="text-xl font-bold text-center text-indigo-900">
+                    <h1 class="text-xl font-bold text-center text-indigo-900 max-lg:text-base">
                         ĐĂNG NHẬP
                     </h1>
                     <form class="space-y-3" @submit.prevent="submitLogin">
