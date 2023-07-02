@@ -32,7 +32,7 @@ cd Budget-Manager-App
 ### 3. Di chuyển vào thư mục con:
 (Tạo 2 terminal để thao tác với 2 thư mục con)
 
-### 3.1. Thư mục Server
+#### 3.1. Thư mục Server
 3.1.1. Di chuyển:
 ```sh
 cd Server
@@ -82,6 +82,24 @@ npm run dev
 http://localhost:8080
 ```
 
-## Lưu ý
+### Lưu ý
 - Máy tính của bạn phải cài đặt git, nodejs và mongoDB
 - Khởi chạy mongoDB trước khi chạy ứng dụng
+
+## Đóng góp
+
+### Mọi đóng góp cho website quản lý chi tiêu cá nhân đều được hoan nghênh! Nếu bạn gặp phải bất kỳ lỗi nào, có đề xuất về các tính năng mới hoặc muốn đóng góp cho cơ sở mã, vui lòng làm theo các bước sau:
+
+- Chia nhánh kho lưu trữ và tạo một nhánh mới.
+
+- Thực hiện các thay đổi và cải tiến mong muốn của bạn.
+
+- Kiểm tra các thay đổi của bạn kỹ lưỡng.
+
+- Cam kết các thay đổi của bạn với các thông điệp rõ ràng và ngắn gọn.
+
+- Đẩy các thay đổi của bạn vào kho lưu trữ rẽ nhánh của bạn.
+
+- Mở một yêu cầu kéo, mô tả các thay đổi của bạn và giải thích lý do tại sao chúng nên được hợp nhất.
+
+- Xin lưu ý rằng tất cả các đóng góp phải được xem xét và chấp nhận bởi những người duy trì dự án.
