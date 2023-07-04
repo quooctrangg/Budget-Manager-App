@@ -87,7 +87,7 @@ onMounted(async () => {
         <div class="flex flex-col justify-center items-center flex-1">
             <div v-if="!chartIncomes.datasets[0].data.length" class="text-red-500">Chưa có dữ liệu...</div>
             <Doughnut v-else :data="chartIncomes" class="w-full h-full" />
-            <h3 class="text-xl font-semibold text-blue-500">Thu nhập</h3>
+            <h3 class="text-xl font-semibold text-green-500">Thu nhập</h3>
         </div>
         <div class="flex flex-col justify-center items-center flex-1">
             <div v-if="!chartExpenses.datasets[0].data.length" class="text-red-500">Chưa có dữ liệu...</div>
