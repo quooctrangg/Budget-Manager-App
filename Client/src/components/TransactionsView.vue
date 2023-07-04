@@ -19,14 +19,14 @@ const select = ref({
     startDate: moment(new Date()).format('YYYY-MM-DD'),
     endDate: moment(new Date()).format('YYYY-MM-DD')
 })
-const transaction = ref(null)
+const transaction = ref([])
 const categorys = ref([])
 const totalIncomes = ref(0)
 const totalExpenses = ref(0)
 const totalBalance = ref(0)
 
 const getTransaction = async () => {
-    transaction.value = null
+    transaction.value = []
     await transactionStore.findAllTransactionByUserId(select.value)
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })

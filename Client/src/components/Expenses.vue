@@ -9,10 +9,11 @@ import Card from '../components/Card.vue'
 const transactionStore = useTransactionStore()
 const $toast = useToast();
 
-const transaction = ref(null)
+const transaction = ref([])
 const sumAmount = ref(0)
 
 const getTransaction = async () => {
+    transaction.value = []
     await transactionStore.findAllTransactionByUserId({ sort: -1, type: -1 })
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })

@@ -196,13 +196,9 @@ export const useTransactionStore = defineStore('transaction', () => {
         }
     }
 
-    onMounted(() => {
-        getTotal()
-    })
-
     return {
         err, result, isShowEdit, data, idTransaction, isLoading, warningTotal, total, setData, resetData, sumAmount, filerByType, totalBalance,
         createTransaction, findAllTransactionByUserId, deleteTransaction, findTransactionById,
-        updateTransaction, chartBarTransaction, chartDoughnutTransaction
+        updateTransaction, chartBarTransaction, chartDoughnutTransaction, getTotal
     }
 })

@@ -9,11 +9,11 @@ import Card from '../components/Card.vue'
 const transactionStore = useTransactionStore()
 const $toast = useToast();
 
-const transaction = ref(null)
+const transaction = ref([])
 const sumAmount = ref(0)
 
 const getTransaction = async () => {
-    transaction.value = null
+    transaction.value = []
     await transactionStore.findAllTransactionByUserId({ sort: -1, type: 1 })
     if (transactionStore.err) {
         $toast.error(transactionStore.err, { position: 'top-right' })
@@ -44,7 +44,7 @@ onMounted(() => {
             <div class="w-[100%] border-[3px] border-white rounded-xl bg-slate-100 text-center p-4">
                 <h3 class="text-indigo-900">
                     Tổng thu nhập:
-                    <span class="text-lime-500 font-bold">
+                    <span class="text-green-500 font-bold">
                         {{ Number(sumAmount).toLocaleString('de-DE') + ' VNĐ' }}
                     </span>
                 </h3>

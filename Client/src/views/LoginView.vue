@@ -3,12 +3,14 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth.store'
 import { useUserStore } from '../stores/user.store'
+import { useTransactionStore } from '../stores/transaction.store'
 import { useToast } from 'vue-toast-notification'
 
 const $toast = useToast();
 const router = useRouter()
 const authStore = useAuthStore()
 const userStore = useUserStore()
+const transactionStore = useTransactionStore()
 
 const user = ref({
     email: '',
@@ -25,6 +27,7 @@ const submitLogin = async () => {
     userStore.user = { ...other }
     $toast.success(authStore.result.message, { position: 'top-right' })
     router.push({ name: 'home' })
+    transactionStore.getTotal()
 }
 
 </script>
